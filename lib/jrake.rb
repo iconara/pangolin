@@ -1,0 +1,1 @@
+require 'jrake/javac'
