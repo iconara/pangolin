@@ -18,7 +18,8 @@ module JRake
                   :class_path,           # array
                   :deprecation_warnings, # boolean
                   :warnings,             # boolean
-                  :encoding              # string
+                  :encoding,             # string
+                  :verbose               # boolean
 
     def initialize( *source_files )
       @source_files = source_files || [ ]
@@ -29,6 +30,7 @@ module JRake
       @deprecation_warnings = true
       @warnings             = true
       @encoding             = nil
+      @verbose              = false
     end
 
     def command_args
@@ -59,11 +61,17 @@ module JRake
       args = command_args.to_java(java.lang.String)
   
       result = com.sun.tools.javac.Main.compile(args, PrintWriter.new(output_writer))
+      
+      puts command_string if @verbose
+      
+      output_str = output_writer.to_s
+      
+      puts output_str if output_str !~ /^\s*$/
   
       if 0 == result
-        puts output_writer.to_s
+        true
       else
-        raise "Compilation failed: #{output_writer}"
+        false
       end
     end
 
