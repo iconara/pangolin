@@ -1,6 +1,6 @@
 class AbstractTool
   
-  def execute
+  def execute( io = $stderr )
     
   end
   

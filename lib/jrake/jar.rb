@@ -5,11 +5,12 @@ module JRake
 
   class Jar
   
-    attr_accessor :output,     # path
-                  :base_dir,   # path
-                  :files,      # array
-                  :manifest,   # hash
-                  :compression # number (0-9)
+    attr_accessor :output,      # path
+                  :base_dir,    # path
+                  :files,       # array
+                  :manifest,    # hash
+                  :compression, # number (0-9)
+                  :verbose      # boolean
                 
     def initialize( *files )
       @files = files || [ ]
@@ -18,12 +19,17 @@ module JRake
       @base_dir    = '.'
       @manifest    = default_manifest
       @compression = 1
+      @verbose     = false
     end
   
     def default_manifest
       {
         'Built-By' => 'JRake'
       }
+    end
+    
+    def execute( io = $stderr )
+      io.puts "jar ..." if @verbose
     end
   
     # // These are the files to include in the ZIP file

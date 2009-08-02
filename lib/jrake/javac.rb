@@ -24,7 +24,7 @@ module JRake
     def initialize( *source_files )
       @source_files = source_files || [ ]
   
-      @source_path          = ['src']
+      @source_path          = [ ]
       @destination          = 'build'
       @class_path           = [ ]
       @deprecation_warnings = true
@@ -55,18 +55,18 @@ module JRake
       'javac ' + command_args.join(' ')
     end
 
-    def execute
+    def execute( io = $stderr )
       output_writer = StringWriter.new
   
       args = command_args.to_java(java.lang.String)
   
       result = com.sun.tools.javac.Main.compile(args, PrintWriter.new(output_writer))
       
-      puts command_string if @verbose
+      io.puts command_string if @verbose
       
       output_str = output_writer.to_s
       
-      puts output_str if output_str !~ /^\s*$/
+      io.puts output_str if output_str !~ /^\s*$/
   
       if 0 == result
         true

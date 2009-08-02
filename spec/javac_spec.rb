@@ -6,8 +6,8 @@ describe Javac do
   
   describe " defaults" do
     
-    it "should default to using 'src' as source path" do
-      @javac.source_path.should == ['src']
+    it "should default to an empty array as source path" do
+      @javac.source_path.should be_empty
     end
     
     it "should default to using 'build' as destination" do
