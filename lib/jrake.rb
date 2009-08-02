@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__)) + '/jrake/jar'
 
 
 def javac( source_files )
-  javac = JRake::Javac.new(source_files)
+  javac = JRake::Javac.new(*source_files)
   
   yield javac
   
@@ -11,7 +11,7 @@ def javac( source_files )
 end
 
 def jar( files )
-  jar = JRake::Jar.new(files)
+  jar = JRake::Jar.new(*files)
   
   yield jar
   
