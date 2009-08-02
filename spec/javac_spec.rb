@@ -35,8 +35,22 @@ describe Javac do
     end
     
   end
+  
+  describe '#initialize' do
     
-  describe " command string" do
+    it "should take the source files as arguments to the constructor" do
+      f1 = 'one/two/three.java'
+      f2 = 'four/five/six.java'
+      
+      javac = Javac.new(f1, f2)
+      
+      javac.source_files.include?(f1).should be_true
+      javac.source_files.include?(f2).should be_true
+    end
+    
+  end
+    
+  describe "#command_string" do
     
     it "should include all named source files in the command string" do
       source_files = ['Main.java', 'com/example/Something.java']

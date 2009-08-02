@@ -1,14 +1,10 @@
 class AbstractTool
   
-  def command_string_components
-    []
+  def execute
+    
   end
   
   def command_string
-    command_string_components.reject { |opts| opts =~ /^\s*$/ }.join(' ')
-  end
-  
-  def execute
     
   end
   
