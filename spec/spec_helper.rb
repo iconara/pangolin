@@ -1,7 +1,7 @@
 $: << File.dirname(__FILE__) + '/../lib'
 
 
-require 'jrake'
+require 'java_tools'
 
 
-include JRake
+include JavaTools

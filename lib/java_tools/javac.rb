@@ -1,7 +1,7 @@
 require 'java'
 
 
-module JRake
+module JavaTools
 
   # must use include_class instead of import because import interferes with Rake's import
   include_class 'java.io.PrintWriter'

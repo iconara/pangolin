@@ -1,8 +1,7 @@
 require 'java'
-require 'pp'
 
 
-module JRake
+module JavaTools
 
   include_class 'java.io.FileOutputStream'
   include_class 'java.util.zip.ZipOutputStream'
