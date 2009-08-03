@@ -82,7 +82,9 @@ module JRake
     end
     
     def execute( io = $stderr )
-      io.puts "jar ..." if @verbose
+      compression_flag = @compression == 0 ? '0' : ''
+      
+      io.puts "jar -c#{compression_flag}f #{@output} …" if @verbose
       
       create_zipfile
     end

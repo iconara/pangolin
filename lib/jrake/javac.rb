@@ -33,24 +33,25 @@ module JRake
 
     def command_args
       args = [ ]
-      
       args << '-sourcepath' << @source_path.join(':') unless @source_path.empty?
-      
       args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
-      
       args << '-classpath' << @class_path.join(':') unless @class_path.empty?
-      
       args << '-deprecation' unless @deprecation_warnings
-      
       args << '-nowarn' unless @warnings
-      
       args << '-encoding' << @encoding if @encoding
-      
       args + @source_files
     end
   
     def command_string
-      'javac ' + command_args.join(' ')
+      args = [ ]
+      args << '-sourcepath' << @source_path.join(':') unless @source_path.empty?
+      args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
+      args << '-classpath' << @class_path.join(':') unless @class_path.empty?
+      args << '-deprecation' unless @deprecation_warnings
+      args << '-nowarn' unless @warnings
+      args << '-encoding' << @encoding if @encoding
+
+      "javac #{args.join(' ')} …"
     end
 
     def execute( io = $stderr )
