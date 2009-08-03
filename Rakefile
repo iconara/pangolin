@@ -1,11 +1,11 @@
-require 'spec/rake/spectask'
-
-
 task :default => :spec
 
 
-Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.spec_opts << '--options' << 'spec/spec.opts'
-  spec.libs << 'src'
-  spec.warning = true
+# Import all .rake-files in the tasks directory
+Dir['tasks/*.rake'].each do |tasks_file|
+  begin
+    load tasks_file
+  rescue Exception => e
+    $stderr.puts e.message
+  end
 end
