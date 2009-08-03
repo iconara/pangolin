@@ -1,0 +1,18 @@
+h1. Java Tools
+
+Ruby wrappers for @javac@ and @jar@ useful when replacing Ant with Rake under JRuby.
+
+Ant is a good tool for some use cases, but it's extremely verbose and it's declarative nature gets in the way even when trying to solve pretty simple problems. Rake is much better in many ways, but it lacks support for running @javac@ and @jar@. Sure, you can run them like any other shell command, but that means waiting for the JVM to start for each call. These wrappers use the programmatic interface to call @javac@ and uses Java's @ZipOutputStream@ to create JAR files, just like Ant does. You only have to wait for one JVM to start up, and using JRuby's Nailgun support, you event only have to do that once.
+
+    task :compile do
+	  javac(FileList['src/**/*.java']) do |conf|
+	    conf.destination = 'build'
+	    conf.verbose     = true
+	  end
+	end
+	
+Even though the wrappers are intended mainly to be used in Rake scripts they have no dependencies on Rake, you can use them in any code running in JRuby.
+
+Because they are not dependent on Rake the wrappers are not written as Rake tasks. You write a regular Rake @task@ block and call @javac@ or @jar@ inside of it. I don't particularly like the way @SpecTask@ or @TestTask@ replace the @task@ declaration, it removes some of the DSL illusion, and because of that there's no @JavacTask@ or @JarTask@ classes.
+
+The wrappers are JRuby only, there's no point in supporting MRI or YARV.
