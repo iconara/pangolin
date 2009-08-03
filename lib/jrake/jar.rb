@@ -33,6 +33,8 @@ module JRake
     
     def add_manifest_attribute( name, value )
       if name =~ /^[A-Za-z0-9][A-Za-z0-9\-_]*$/
+        remove_manifest_attribute(name)
+        
         @manifest[name] = value
       else
         raise ArgumentError, "Malformed attribute name: #{name}"
@@ -40,7 +42,7 @@ module JRake
     end
     
     def remove_manifest_attribute( name )
-      @manifest.delete(name)
+      @manifest.delete_if { |key, value| key.downcase == name.downcase }
     end
     
     def add_file( file_path, archive_path = nil )

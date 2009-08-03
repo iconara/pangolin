@@ -137,6 +137,21 @@ describe Jar do
       }.should_not change(@jar, :manifest)
     end
     
+    it "should ignore case when setting attributes" do
+      @jar.add_manifest_attribute('Hello', 'World')
+      @jar.add_manifest_attribute('hello', 'Theo')
+      
+      @jar.manifest.include?('Hello: World').should be_false
+      @jar.manifest.include?('hello: Theo').should be_true
+    end
+    
+    it "should ignore case when removing attributes" do
+      @jar.add_manifest_attribute('Hello', 'World')
+      @jar.remove_manifest_attribute('hello')
+      
+      @jar.manifest.include?('Hello: World').should be_false
+    end
+    
   end
   
   describe "#main_class=" do
