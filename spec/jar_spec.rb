@@ -68,7 +68,7 @@ describe Jar do
     
   end
   
-  describe "#manifest/#add_manifest_attribute" do
+  describe "#manifest" do
     
     it "should include the Built-By key" do
       @jar.manifest.include?('Built-By').should be_true
@@ -97,6 +97,10 @@ describe Jar do
       @jar.manifest.include?('one: 2').should_not be_true
       @jar.manifest.include?('one: 1').should be_true
     end
+    
+  end
+    
+  describe "#add/remove_manifest_attribute" do
     
     it "should reject an empty attribute name" do
       lambda {
@@ -130,7 +134,31 @@ describe Jar do
         @jar.add_manifest_attribute('Class-Path', 'foo')
       }.should_not raise_error
     end
-        
+
+    it "should be a no op to add and remove an attribute" do
+      lambda {
+        @jar.add_manifest_attribute('Hello', 'World')
+      
+        @jar.remove_manifest_attribute('Hello')
+      }.should_not change(@jar, :manifest)
+    end
+    
+    it "should be a no op to remove a non-existent attribute" do
+      lambda {
+        @jar.remove_manifest_attribute('Hello')
+      }.should_not change(@jar, :manifest)
+    end
+    
+  end
+  
+  describe "#main_class=" do
+    
+    it "should set the Main-Class attribute" do
+      @jar.main_class = 'com.example.Main'
+      
+      @jar.manifest.include?('Main-Class: com.example.Main').should be_true
+    end
+    
   end
   
 end

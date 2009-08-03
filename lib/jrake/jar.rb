@@ -41,6 +41,18 @@ module JRake
       end
     end
     
+    def remove_manifest_attribute( name )
+      @manifest.delete(name)
+    end
+    
+    def main_class=( class_name )
+      if class_name
+        add_manifest_attribute('Main-Class', class_name)
+      else
+        remove_manifest_attribute('Main-Class')
+      end
+    end
+    
     def execute( io = $stderr )
       io.puts "jar ..." if @verbose
       
