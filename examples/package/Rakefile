@@ -10,9 +10,8 @@ CLOBBER.include('dist/*.jar')
 task :default => :package
 
 task :package => [:compile, 'dist'] do
-  jar(FileList['build/**/*.class']) do |conf|
-    conf.base_dir = 'build'
-    conf.output   = 'dist/package.jar'
+  jar('dist/package.jar') do |conf|
+    conf.add_files(FileList['build/**/*.class'], 'build')
     conf.verbose  = true
   end
 end

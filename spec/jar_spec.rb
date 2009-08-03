@@ -13,10 +13,6 @@ describe Jar do
       @jar.output.should be_nil
     end
     
-    it "should set basedir to the current directory" do
-      @jar.base_dir.should == '.'
-    end
-    
     it "should have a default compression rate between 0 and 9" do
       (@jar.compression >= 0).should be_true
       (@jar.compression <= 9).should be_true
@@ -26,22 +22,20 @@ describe Jar do
       @jar.manifest.should_not be_nil
     end
     
-    it "should have an empty list of files" do
-      @jar.files.should be_empty
+    it "should have no entries" do
+      @jar.entries.should be_empty
     end
     
   end
   
   describe "#initialize" do
     
-    it "should take the list of files as an argument to the constructor" do
-      f1 = 'one/two/three.java'
-      f2 = 'four/five/six.java'
+    it "should take a path to the output file as argument" do
+      path = 'path/to/output.jar'
       
-      jar = Jar.new(f1, f2)
+      jar = Jar.new(path)
       
-      jar.files.include?(f1).should be_true
-      jar.files.include?(f2).should be_true
+      jar.output.should == path
     end
     
   end
@@ -49,21 +43,15 @@ describe Jar do
   describe "#archive_path" do
     
     it "should remove the base dir path from the archive path" do
-      @jar.base_dir = 'build'
-
-      @jar.archive_path('build/com/example/HelloWorld.class').should == 'com/example/HelloWorld.class'
+      @jar.find_archive_path('build/com/example/HelloWorld.class', 'build').should == 'com/example/HelloWorld.class'
     end
     
     it "should not remove anything from a file not in the base dir path" do
-      @jar.base_dir = 'build'
-      
-      @jar.archive_path('some/other/path').should == 'some/other/path'
+      @jar.find_archive_path('some/other/path', 'build').should == 'some/other/path'
     end
     
     it "should not remove anything from a file path if the base dir path is nil" do
-      @jar.base_dir = nil
-      
-      @jar.archive_path('some/other/path').should == 'some/other/path'
+      @jar.find_archive_path('some/other/path', nil).should == 'some/other/path'
     end
     
   end
@@ -157,6 +145,117 @@ describe Jar do
       @jar.main_class = 'com.example.Main'
       
       @jar.manifest.include?('Main-Class: com.example.Main').should be_true
+    end
+    
+  end
+
+  describe "#add_file" do
+    
+    it "should add an entry" do
+      path = __FILE__
+      
+      @jar.add_file(path)
+      
+      @jar.entries.include?(path).should be_true
+    end
+    
+    it "should add an entry at the specified archive path" do
+      path = __FILE__
+      archive_path = 'some/other/path.rb'
+      
+      @jar.add_file(path, archive_path)
+      
+      @jar.entries.include?(path).should be_false
+      @jar.entries.include?(archive_path).should be_true
+    end
+    
+    it "should raise an exception if the file doesn't exist" do
+      lambda {
+        @jar.add_file('some/bogus/path')
+      }.should raise_error(ArgumentError)
+    end
+    
+    it "should raise an exception if the argument is a directory" do
+      lambda {
+        @jar.add_file(File.dirname(__FILE__))
+      }.should raise_error(ArgumentError)
+    end
+            
+  end
+  
+  describe "#add_blob" do
+    
+    it "should add an entry" do
+      archive_path = 'some/path/to/a/file.txt'
+      
+      @jar.add_blob('one two three', archive_path)
+      
+      @jar.entries.include?(archive_path).should be_true
+    end
+            
+  end
+  
+  describe "#add_files" do
+    
+    it "should add all files" do
+      files = Dir.glob(File.dirname(__FILE__) + '/*.rb')
+      
+      @jar.add_files(files)
+      
+      files.each do |file|
+        @jar.entries.include?(file).should be_true
+      end
+    end
+    
+    it "should remove the base dir from all file paths" do
+      files = Dir.glob(File.dirname(__FILE__) + '/*.rb').map { |f| File.expand_path(f) }
+      base_dir = File.expand_path(File.dirname(__FILE__ + '/..'))
+      
+      @jar.add_files(files, base_dir)
+      
+      files.each do |file|
+        @jar.entries.include?(file.gsub(base_dir + '/', '')).should be_true
+      end
+    end
+    
+    it "should raise an exception if any of the files is a directory" do
+      files = [__FILE__, File.dirname(__FILE__)]
+      
+      lambda {
+        @jar.add_files(files)
+      }.should raise_error(ArgumentError)
+    end
+    
+    it "should raise an exception if any file doesn't exist" do
+      files = [__FILE__, 'some/bogus/path.txt']
+      
+      lambda {
+        @jar.add_files(files)
+      }.should raise_error(ArgumentError)
+    end
+    
+  end
+  
+  describe "#remove_entry" do
+    
+    it "should remove an added file" do
+      @jar.add_file(__FILE__)
+      @jar.remove_entry(__FILE__)
+
+      @jar.entries.include?(__FILE__).should be_false
+    end
+    
+    it "should remove an added blob" do
+      @jar.add_blob('foobar', 'foo/bar')
+      @jar.remove_entry('foo/bar')
+      
+      @jar.entries.include?('foo/bar').should be_false
+    end
+    
+    it "should not do anything when removing an entry that does not exist" do
+      lambda {
+        @jar.remove_entry('non/existent/entry')
+      }.should_not change(@jar, :entries)
     end
     
   end

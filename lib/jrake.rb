@@ -10,8 +10,8 @@ def javac( source_files )
   javac.execute
 end
 
-def jar( files )
-  jar = JRake::Jar.new(*files)
+def jar( output )
+  jar = JRake::Jar.new(output)
   
   yield jar
   
