@@ -1,3 +1,6 @@
+raise "JavaTools requires JRuby" unless RUBY_PLATFORM =~ /\bjava\b/
+
+
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/javac'
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/jar'
 
