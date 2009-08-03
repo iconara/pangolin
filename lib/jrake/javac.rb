@@ -1,7 +1,5 @@
 require 'java'
 
-require File.dirname(__FILE__) + '/abstract_tool'
-
 
 module JRake
 
@@ -10,7 +8,7 @@ module JRake
   include_class 'java.io.StringWriter'
 
 
-  class Javac < AbstractTool  
+  class Javac
 
     attr_accessor :source_files,         # array
                   :source_path,          # array
