@@ -52,13 +52,13 @@ describe Javac do
     
   describe "#command_string" do
     
-    it "should include all named source files in the command string" do
+    it "should include all named source files in the command args" do
       source_files = ['Main.java', 'com/example/Something.java']
   
       @javac.source_files = source_files
   
       source_files.each do |file_name|
-        @javac.command_string.should match(/Main.java com\/example\/Something\.java$/)
+        @javac.command_args.include?(file_name)
       end
     end
 
