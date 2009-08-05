@@ -2,21 +2,50 @@ h1. Java Tools
 
 Ruby wrappers for javac and jar that don't just exec.
 
-Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run javac and jar, and although it's easy to run these as shell scripts you have to wait for the JVM to start. In combination with JRuby this gem lets you run javac and jar in your Rake scripts without exec'ing.
+Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run javac and jar, and although it's easy to run these with exec you have to wait for the JVM to start for each invocation. In combination with JRuby this gem lets you run @javac@ and @jar@ in your Rake scripts without exec'ing, by using the programmatic interface to Javac and Java's ZIP file creation capabilities.
 
-Ant is a good tool for some use cases, but it's extremely verbose and it's declarative nature gets in the way even when trying to solve pretty simple problems. Rake is much better in many ways, but it lacks support for running @javac@ and @jar@. Sure, you can run them like any other shell command, but that means waiting for the JVM to start for each call. These wrappers use the programmatic interface to call @javac@ and uses Java's @ZipOutputStream@ to create JAR files, just like Ant does. You only have to wait for one JVM to start up, and using JRuby's Nailgun support, you even only have to do that once.
+h2. Example
 
-    task :compile do
-	  javac(FileList['src/**/*.java']) do |conf|
-	    conf.destination = 'build'
-	    conf.verbose     = true
-	  end
-	end
+<pre><code>
+  require 'java_tools'
+
+
+  task :compile do
+    javac FileList['src/**/*.java'], :destination => 'build, :class_path => FileList['lib/*.jar']
+  end
+
+  task :dist => :compile do
+    jar 'dist/my-awsome-app.jar', FileList['build/**/*.class'], :base_dir => 'build'
+  end
+</code></pre>
 	
-Even though the wrappers are intended mainly to be used in Rake scripts they have no dependencies on Rake, you can use them in any code running in JRuby.
+There are more examples in the @examples@ directory.
 
-Because they are not dependent on Rake the wrappers are not written as Rake tasks. You write a regular Rake @task@ block and call @javac@ or @jar@ inside of it like other commands such as @cp@, @rm@ or @sh@. I don't particularly like the way @SpecTask@ or @TestTask@ replace the @task@ declaration, it removes some of the DSL illusion, and because of that there's no @JavacTask@ nor @JarTask@.
+h2. Command style
+
+Many Rake add-ons look like this:
+
+<pre><code>
+  Spec::Rake::SpecTask.new(:spec) do |spec|
+    spec.spec_opts << '--options' << 'spec/spec.opts'
+    # ...
+  end
+</code></pre>
+
+I think it ruins the DSL illusion, and I prefer to write tasks that contain commands, more like how @cp@, @rm@ and @sh@ work in Rake.
+
+h2. Nailgun
+
+Don't forget that since JRuby 1.3 you can minimize the startup by using the built-in Nailgun support. Run
+
+    jruby --ng-server &
+
+to start a Nailgun server and then run Rake with this command
+
+    jruby --ng -S rake
+
+you'll notice that the startup time decreases significantly the second time you run it. To avoid having to write all that every time you want to build create an alias, I call mine @jrk@.
 
 h2. Upcomming
 
-Even though the whole rationale behind Java Tools is to avoid exec it wouldn't be much effort to support non-JRuby runtimes.
+Even though the whole rationale behind Java Tools is to avoid exec it wouldn't be much effort to support non-JRuby runtimes since at least the @javac@ command needs to build the command string anyway.
