@@ -10,18 +10,22 @@ module JavaTools
 
   class Jar
   
-    attr_accessor :output,      # path
-                  :base_dir,    # path
+    attr_accessor :base_dir,    # string
                   :compression, # number (0-9)
                   :verbose      # boolean
+                  
+    attr_reader :output
                 
-    def initialize( output = nil )
-      @output = output
+    def initialize( output, files = nil, base_dir = nil )
+      @output   = output
+      @base_dir = base_dir
       
       @entries     = { } # archive_path => JarEntry
       @manifest    = default_manifest
       @compression = 1
       @verbose     = false
+      
+      add_files(files) unless files.nil? || files.empty?
     end
   
     def default_manifest
@@ -45,6 +49,8 @@ module JavaTools
     end
     
     def add_file( file_path, archive_path = nil )
+      archive_path = find_archive_path(file_path, @base_dir) unless archive_path
+      
       if File.directory?(file_path)
         raise ArgumentError, "\"#{file_path}\" is a directory"
       elsif ! File.exists?(file_path)
@@ -56,7 +62,7 @@ module JavaTools
     
     def add_files( files, base_dir = nil )
       files.each do |file|
-        add_file(file, find_archive_path(file, base_dir))
+        add_file(file, find_archive_path(file, base_dir || @base_dir))
       end
     end
     

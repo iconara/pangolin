@@ -4,13 +4,14 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe Jar do
   
   before(:each) do
-    @jar = Jar.new
+    @output = 'archive.jar'
+    @jar    = Jar.new(@output)
   end
   
   describe " defaults" do
     
-    it "should set output to nil" do
-      @jar.output.should be_nil
+    it "should set the output file specified in the constructor" do
+      @jar.output.should == @output
     end
     
     it "should have a default compression rate between 0 and 9" do
@@ -26,22 +27,26 @@ describe Jar do
       @jar.entries.should be_empty
     end
     
-    it "should raise an exception when #execute is called" do
-      lambda {
-        @jar.execute
-      }.should raise_error
-    end
-    
   end
   
   describe "#initialize" do
     
-    it "should take a path to the output file as argument" do
-      path = 'path/to/output.jar'
+    it "should take a path to the output file as parameters" do
+      output = 'path/to/output.jar'
       
-      jar = Jar.new(path)
+      jar = Jar.new(output)
       
-      jar.output.should == path
+      jar.output.should == output
+    end
+    
+    it "should take a path to the output and a list of files as parameters" do
+      output = 'output.jar'
+      files  = [__FILE__]
+      
+      jar = Jar.new(output, files)
+      
+      jar.output.should == output
+      jar.entries.should == [__FILE__]
     end
     
   end

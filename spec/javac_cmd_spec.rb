@@ -4,11 +4,9 @@ describe "javac command" do
     files = ['one/two.java', 'three/four.java']
     
     instance = Javac.new(*files)
+    instance.should_receive(:execute) # stop the real execute from being called
     
-    Javac.should_receive(:new).with(*files).and_return do
-      instance.should_receive(:execute) # stop the real execute from being called
-      instance
-    end
+    Javac.should_receive(:new).with(*files).and_return(instance)
     
     javac files
   end
@@ -26,18 +24,21 @@ describe "javac command" do
   end
   
   it "should set properties on the yielded Javac instance" do
+    destination = 'build'
+    source_path = ['xyz', 'abc']
+    
     instance = Javac.new('Main.java')
     
     Javac.should_receive(:new).and_return do
-      instance.should_receive(:destination=)
-      instance.should_receive(:source_path=)
+      instance.should_receive(:destination=).with(destination)
+      instance.should_receive(:source_path=).with(source_path)
       instance.should_receive(:execute) # stop the real execute from being called
       instance
     end
     
     javac('Main.java') do |conf|
-      conf.destination = 'build'
-      conf.source_path = ['xyz', 'abc']
+      conf.destination = destination
+      conf.source_path = source_path
     end
   end
   
