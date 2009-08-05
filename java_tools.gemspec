@@ -3,6 +3,7 @@
 Gem::Specification.new do |s|
   s.name = %q{java_tools}
   s.version = "0.1.0"
+  s.platform = %q{java}
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Theo Hultberg"]
@@ -20,6 +21,7 @@ Gem::Specification.new do |s|
      "examples/compile/src/com/example/HelloWorld.java",
      "examples/package/Rakefile",
      "examples/package/src/com/example/HelloWorld.java",
+     "java_tools.gemspec",
      "lib/java_tools.rb",
      "lib/java_tools/jar.rb",
      "lib/java_tools/javac.rb",
