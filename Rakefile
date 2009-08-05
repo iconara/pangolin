@@ -1,3 +1,6 @@
+require 'rake/clean'
+
+
 task :default => :spec
 
 
