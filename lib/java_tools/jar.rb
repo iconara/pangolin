@@ -122,8 +122,8 @@ module JavaTools
     
     def manifest
       @manifest.keys.inject("") do |str, key|
-        str + "\n#{key}: #{@manifest[key]}"
-      end + "\n"
+        str + "#{key}: #{@manifest[key]}\n"
+      end
     end
   
   end

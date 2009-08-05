@@ -86,6 +86,10 @@ describe Jar do
       @jar.manifest.include?('one: 1').should be_true
     end
     
+    it "should not begin with whitespace" do
+      @jar.manifest.should_not match(/^\s/)
+    end
+    
   end
     
   describe "#add/remove_manifest_attribute" do
