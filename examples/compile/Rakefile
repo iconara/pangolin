@@ -1,19 +1,16 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/jrake')
+require File.expand_path(File.dirname(__FILE__) + '/../../lib/java_tools')
 
 require 'rake/clean'
 
 
-CLOBBER.include('build/**/*.class')
+CLOBBER.include('build')
 
 
 task :default => :compile
 
 desc "Compile all classes"
 task :compile => 'build' do
-  javac(FileList['src/**/*.java']) do |conf|
-    conf.destination = 'build'
-    conf.verbose     = true
-  end
+  javac FileList['src/**/*.java'], :destination => 'build', :verbose => true
 end
 
 directory 'build'

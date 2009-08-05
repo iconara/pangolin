@@ -5,18 +5,30 @@ require File.expand_path(File.dirname(__FILE__)) + '/java_tools/javac'
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/jar'
 
 
-def javac( source_files )
-  javac = JavaTools::Javac.new(*source_files)
+def javac( source_files, options = nil )
+  obj = JavaTools::Javac.new(*source_files)
   
-  yield javac
+  if block_given?
+    yield obj
+  elsif options
+    options.each do |option, value|
+      setter_name = "#{option}="
+      
+      if obj.respond_to? setter_name
+        obj.send(setter_name, value)
+      else
+        raise ArgumentError, "Invalid option: #{option}"
+      end
+    end
+  end
   
-  javac.execute
+  obj.execute
 end
 
 def jar( output )
-  jar = JavaTools::Jar.new(output)
+  obj = JavaTools::Jar.new(output)
   
-  yield jar
+  yield obj if block_given?
   
-  jar.execute
+  obj.execute
 end
