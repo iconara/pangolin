@@ -20,7 +20,7 @@ describe Jar do
     end
     
     it "should have a default manifest" do
-      @jar.manifest.should_not be_nil
+      @jar.manifest_string.should_not be_nil
     end
     
     it "should have no entries" do
@@ -67,106 +67,72 @@ describe Jar do
     
   end
   
-  describe "#manifest" do
+  describe " manifest" do
     
     it "should include the Built-By key" do
-      @jar.manifest.include?('Built-By').should be_true
+      @jar.manifest_string.include?('Built-By').should be_true
     end
     
     it "should include added attributes" do
-      @jar.add_manifest_attribute('abc', '123')
+      @jar.manifest = {'abc' => '123'}
       
-      @jar.manifest.include?('abc: 123').should be_true
+      @jar.manifest_string.include?('abc: 123').should be_true
     end
     
     it "should write the attributes on the right format" do
-      @jar.add_manifest_attribute('one', '1')
-      @jar.add_manifest_attribute('two', '2')
-      @jar.add_manifest_attribute('three', '3')
+      @jar.manifest = {'one' => '1', 'two' => '2', 'three' => '3'}
       
-      @jar.manifest.include?("one: 1\n").should be_true
-      @jar.manifest.include?("two: 2\n").should be_true
-      @jar.manifest.include?("three: 3\n").should be_true
+      @jar.manifest_string.include?("one: 1\n").should be_true
+      @jar.manifest_string.include?("two: 2\n").should be_true
+      @jar.manifest_string.include?("three: 3\n").should be_true
     end
-    
-    it "should only use the last set value of an attribute" do
-      @jar.add_manifest_attribute('one', '2')
-      @jar.add_manifest_attribute('one', '1')
-      
-      @jar.manifest.include?('one: 2').should_not be_true
-      @jar.manifest.include?('one: 1').should be_true
-    end
-    
+        
     it "should not begin with whitespace" do
-      @jar.manifest.should_not match(/^\s/)
+      @jar.manifest_string[0..1].should_not match(/\s/)
     end
-    
-  end
-    
-  describe "#add/remove_manifest_attribute" do
     
     it "should reject an empty attribute name" do
       lambda {
-        @jar.add_manifest_attribute('', '432')
+        @jar.manifest = {'' => '432'}
       }.should raise_error(ArgumentError)
     end
 
     it "should reject nil as attribute name" do
       lambda {
-        @jar.add_manifest_attribute(nil, 'Hello world')
+        @jar.manifest = {nil => 'Hello world'}
       }.should raise_error(ArgumentError)
     end
     
     it "should reject an attribute name containing a space" do
       lambda {
-        @jar.add_manifest_attribute('Hello World', 'foo')
+        @jar.manifest = {'Hello World' => 'foo'}
       }.should raise_error(ArgumentError)
     end
     
     it "should reject an attribute name containing a colon" do
       lambda {
-        @jar.add_manifest_attribute('Hello:World', 'foo')
+        @jar.manifest = {'Hello:World' => 'foo'}
       }.should raise_error(ArgumentError)
     end
     
     it "should accept a variety of legal attribute names" do
       lambda {
-        @jar.add_manifest_attribute('Manifest-Version', 'foo')
-        @jar.add_manifest_attribute('Created-By', 'foo')
-        @jar.add_manifest_attribute('Signature-Version', 'foo')
-        @jar.add_manifest_attribute('Class-Path', 'foo')
+        @jar.manifest = {
+          'Manifest-Version' => 'foo',
+          'Created-By' => 'foo',
+          'Signature-Version' => 'foo',
+          'Class-Path' => 'foo'
+        }
       }.should_not raise_error
-    end
-
-    it "should be a no op to add and remove an attribute" do
-      lambda {
-        @jar.add_manifest_attribute('Hello', 'World')
-      
-        @jar.remove_manifest_attribute('Hello')
-      }.should_not change(@jar, :manifest)
-    end
-    
-    it "should be a no op to remove a non-existent attribute" do
-      lambda {
-        @jar.remove_manifest_attribute('Hello')
-      }.should_not change(@jar, :manifest)
     end
     
     it "should ignore case when setting attributes" do
-      @jar.add_manifest_attribute('Hello', 'World')
-      @jar.add_manifest_attribute('hello', 'Theo')
+      @jar.manifest = {'Hello' => 'World', 'hello' => 'Theo'}
       
-      @jar.manifest.include?('Hello: World').should be_false
-      @jar.manifest.include?('hello: Theo').should be_true
+      @jar.manifest_string.include?('Hello: World').should be_false
+      @jar.manifest_string.include?('hello: Theo').should be_true
     end
-    
-    it "should ignore case when removing attributes" do
-      @jar.add_manifest_attribute('Hello', 'World')
-      @jar.remove_manifest_attribute('hello')
-      
-      @jar.manifest.include?('Hello: World').should be_false
-    end
-    
+        
   end
   
   describe "#main_class=" do
@@ -174,7 +140,7 @@ describe Jar do
     it "should set the Main-Class attribute" do
       @jar.main_class = 'com.example.Main'
       
-      @jar.manifest.include?('Main-Class: com.example.Main').should be_true
+      @jar.manifest_string.include?('Main-Class: com.example.Main').should be_true
     end
     
   end

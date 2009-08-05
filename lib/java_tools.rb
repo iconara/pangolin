@@ -6,6 +6,14 @@ require File.expand_path(File.dirname(__FILE__)) + '/java_tools/jar'
 
 
 module JavaTools
+  
+  def self.version
+    version_file = File.join(File.dirname(__FILE__), '..', 'VERSION')
+    
+    File.open(version_file) do |f|
+      f.readline.strip
+    end
+  end
 
   def self.configure_command( command, options )
     options.each do |option, value|

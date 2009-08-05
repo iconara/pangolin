@@ -17,35 +17,58 @@ module JavaTools
     attr_reader :output
                 
     def initialize( output, files = nil, base_dir = nil )
-      @output   = output
-      @base_dir = base_dir
-      
+      @output      = output
+      @base_dir    = base_dir
       @entries     = { } # archive_path => JarEntry
-      @manifest    = default_manifest
-      @compression = 1
       @verbose     = false
+      @compression = 1
+      
+      self.manifest = { }
       
       add_files(files) unless files.nil? || files.empty?
     end
   
-    def default_manifest
-      {
-        'Built-By' => 'JRake'
-      }
-    end
-    
-    def add_manifest_attribute( name, value )
-      if name =~ /^[A-Za-z0-9][A-Za-z0-9\-_]*$/
-        remove_manifest_attribute(name)
+    def manifest=( manifest_hash )
+      @manifest = default_manifest
+      
+      manifest_hash.each do |key, value|
+        raise ArgumentError, "Malformed attribute name #{key}" if key !~ /^[\w\d][\w\d\-_]*$/
         
-        @manifest[name] = value
-      else
-        raise ArgumentError, "Malformed attribute name: #{name}"
+        remove_manifest_attribute(key)
+        
+        @manifest[key] = value
       end
     end
     
     def remove_manifest_attribute( name )
-      @manifest.delete_if { |key, value| key.downcase == name.downcase }
+      @manifest.delete_if do |key, value|
+        key.downcase == name.downcase
+      end      
+    end
+    
+    def main_class=( class_name )
+      if class_name
+        @manifest['Main-Class'] = class_name
+      else
+        remove_manifest_attribute('Main-Class')
+      end
+    end
+    
+    def default_manifest
+      {
+        'Built-By' => "JavaTools v#{JavaTools::version}",
+        'Manifest-Version' => '1.0'
+      }
+    end
+    
+    def manifest_string
+      @manifest.keys.inject("") do |str, key|
+        str + "#{key}: #{@manifest[key]}\n"
+      end
+    end
+    
+    def commit_manifest
+      add_blob(manifest_string, 'META-INF/MANIFEST.MF')
     end
     
     def add_file( file_path, archive_path = nil )
@@ -78,14 +101,6 @@ module JavaTools
       @entries.keys
     end
     
-    def main_class=( class_name )
-      if class_name
-        add_manifest_attribute('Main-Class', class_name)
-      else
-        remove_manifest_attribute('Main-Class')
-      end
-    end
-    
     def execute( io = $stderr )
       raise "Output not set" unless @output
       
@@ -93,12 +108,11 @@ module JavaTools
       
       io.puts "jar -c#{compression_flag}f #{@output} …" if @verbose
       
+      commit_manifest
       create_zipfile
     end
     
     def create_zipfile
-      add_blob(manifest, 'META-INF/MANIFEST.MF')
-      
       buffer_size = 65536
       
       zipstream = ZipOutputStream.new(FileOutputStream.new(@output))
@@ -128,12 +142,6 @@ module JavaTools
       path
     end
     
-    def manifest
-      @manifest.keys.inject("") do |str, key|
-        str + "#{key}: #{@manifest[key]}\n"
-      end
-    end
-  
   end
   
 end

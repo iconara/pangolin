@@ -10,7 +10,10 @@ CLOBBER.include('dist')
 task :default => :package
 
 task :package => [:compile, 'dist'] do
-  jar 'dist/package.jar', FileList['build/**/*.class'], :base_dir => 'build', :main_class => 'com.example.HelloWorld', :verbose => true
+  jar 'dist/package.jar', FileList['build/**/*.class'], :base_dir => 'build', 
+                                                      :main_class => 'com.example.HelloWorld', 
+                                                        :manifest => {'X-Test', 'foo'},
+                                                         :verbose => true
 end
 
 task :compile => 'build' do
