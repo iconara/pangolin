@@ -38,11 +38,11 @@ h2. Nailgun
 
 Don't forget that since JRuby 1.3 you can minimize the startup by using the built-in Nailgun support. Run
 
-    jruby --ng-server &
+@jruby --ng-server &@
 
 to start a Nailgun server and then run Rake with this command
 
-    jruby --ng -S rake
+@jruby --ng -S rake@
 
 you'll notice that the startup time decreases significantly the second time you run it. To avoid having to write all that every time you want to build create an alias, I call mine @jrk@.
 
