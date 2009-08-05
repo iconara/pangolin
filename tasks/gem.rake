@@ -9,7 +9,7 @@ Jeweler::Tasks.new do |gemspec|
   gemspec.homepage = "http://github.com/iconara/java_tools"
   gemspec.authors = ["Theo Hultberg"]
   gemspec.files.exclude '**/.gitignore'
-  gemspec.platform = 'java'
+#  gemspec.platform = 'java'
 end
 
 CLEAN.include('pkg')
