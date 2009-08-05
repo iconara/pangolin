@@ -81,6 +81,8 @@ module JavaTools
     end
     
     def execute( io = $stderr )
+      raise "Output not set" unless @output
+      
       compression_flag = @compression == 0 ? '0' : ''
       
       io.puts "jar -c#{compression_flag}f #{@output} …" if @verbose

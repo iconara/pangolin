@@ -26,6 +26,12 @@ describe Jar do
       @jar.entries.should be_empty
     end
     
+    it "should raise an exception when #execute is called" do
+      lambda {
+        @jar.execute
+      }.should raise_error
+    end
+    
   end
   
   describe "#initialize" do
