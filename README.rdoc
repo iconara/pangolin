@@ -2,7 +2,7 @@
 
 Ruby wrappers for javac and jar that don't just exec.
 
-Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run javac and jar, and although it's easy to run these with exec you have to wait for the JVM to start for each invocation. In combination with JRuby this gem lets you run +javac+ and +jar+ in your Rake scripts without exec'ing, by using the programmatic interface to Javac and Java's ZIP file creation capabilities.
+Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run +javac+ and +jar+, and although it's easy to run these with exec you have to wait for the JVM to start for each invocation. In combination with JRuby this gem lets you run +javac+ and +jar+ in your Rake scripts without exec'ing, by using the programmatic interface to Javac and Java's ZIP file creation capabilities.
 
 == Example
 
