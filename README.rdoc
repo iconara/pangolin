@@ -19,6 +19,11 @@ Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only t
 	
 There are more examples in the +examples+ directory.
 
+== Installation
+
+  gem sources -a http://gems.github.com
+  sudo gem install iconara-java_tools
+
 == Command style
 
 Many Rake add-ons look like this:
