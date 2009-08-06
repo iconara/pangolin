@@ -10,14 +10,30 @@ module JavaTools
 
   class Javac
 
-    attr_accessor :source_files,         # array
-                  :source_path,          # array
-                  :destination,          # string
-                  :class_path,           # array
-                  :deprecation_warnings, # boolean
-                  :warnings,             # boolean
-                  :encoding,             # string
-                  :verbose               # boolean
+    # The files to compile.
+    attr_accessor :source_files
+    
+    # Additional directories where source files can be found.
+    attr_accessor :source_path
+                  
+    # The directory where the generated class files should be written, defaults to "build"
+    attr_accessor :destination
+  
+    # The compilation class path
+    attr_accessor :class_path
+    
+    # Show deprecation warnings, true by default
+    attr_accessor :deprecation_warnings
+    
+    # Generate warnings, true by default
+    attr_accessor :warnings
+    
+    # The encoding of the source files
+    attr_accessor :encoding
+    
+    # Whether or not to print the equivalent command string to the output (see #execute)
+    attr_accessor :verbose
+    
 
     def initialize( *source_files )
       @source_files = source_files || [ ]
@@ -31,7 +47,7 @@ module JavaTools
       @verbose              = false
     end
 
-    def command_args
+    def command_args # :nodoc:
       args = [ ]
       args << '-sourcepath' << @source_path.join(':') unless @source_path.empty?
       args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
@@ -42,7 +58,7 @@ module JavaTools
       args + @source_files
     end
   
-    def command_string
+    def command_string # :nodoc:
       args = [ ]
       args << '-sourcepath' << @source_path.join(':') unless @source_path.empty?
       args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
@@ -54,6 +70,9 @@ module JavaTools
       "javac #{args.join(' ')} …"
     end
 
+    # Run javac. If #verbose is true the equivalent command string for
+    # the +javac+ command will be printed to the stream passed as +io+ (or
+    # +$stdout+ by default)
     def execute( io = $stderr )
       output_writer = StringWriter.new
   
