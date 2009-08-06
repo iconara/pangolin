@@ -21,8 +21,8 @@ There are more examples in the +examples+ directory.
 
 == Installation
 
-  gem sources -a http://gems.github.com
-  sudo gem install iconara-java_tools
+  jruby -S gem sources -a http://gems.github.com
+  sudo jruby -S gem install iconara-java_tools
 
 == Command style
 
