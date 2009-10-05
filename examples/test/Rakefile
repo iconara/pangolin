@@ -1,0 +1,21 @@
+require File.expand_path(File.dirname(__FILE__) + '/../../lib/java_tools')
+
+require 'rake/clean'
+
+
+CLOBBER.include('build')
+
+
+task :default => :test
+
+task :compile => 'build' do
+  javac FileList['{src,test}/**/*.java'], :destination => 'build',
+                                           :class_path => FileList['lib/*.jar'],
+                                              :verbose => true
+end
+
+task :test => :compile do
+  junit FileList['build/**/Test*.class'].pathmap('%{build/,}X').gsub('/', '.'), :class_path => ['build/']
+end
+
+directory 'build'

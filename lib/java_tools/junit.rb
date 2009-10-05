@@ -30,7 +30,7 @@ module JavaTools
   private
   
     def full_class_path
-      @class_path + [File.dirname(__FILE__) + '/ext/junit-4.7.jar']
+      @class_path + [File.dirname(__FILE__) + '/ext/junit.jar']
     end
   
     def pretty_class_path

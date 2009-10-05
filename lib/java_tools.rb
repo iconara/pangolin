@@ -3,6 +3,7 @@ raise "JavaTools requires JRuby" unless RUBY_PLATFORM =~ /\bjava\b/
 
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/javac'
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/jar'
+require File.expand_path(File.dirname(__FILE__)) + '/java_tools/junit'
 
 
 module JavaTools # :nodoc:
@@ -14,7 +15,17 @@ module JavaTools # :nodoc:
       f.readline.strip
     end
   end
+  
+  def self.exec_command( obj, options, block )
+    if block
+      yield obj
+    elsif options
+      configure_command(obj, options)
+    end
 
+    obj.execute
+  end
+  
   def self.configure_command( command, options ) # :nodoc:
     options.each do |option, value|
       setter_name = "#{option}="
@@ -27,6 +38,17 @@ module JavaTools # :nodoc:
     end
   end
   
+end
+
+class Exception # :nodoc:
+  alias exception_backtrace backtrace
+  
+  # Elide JRuby backtraces to remove all the internal stuff
+  def backtrace
+    exception_backtrace.reject do |line|
+      line =~ /^(org\/jruby|com\/mysql|sun\/|java\/)/
+    end
+  end
 end
 
 # Javac can be run in either command or yield mode: command mode
@@ -103,4 +125,10 @@ def jar( output, files = nil, options = nil )
   end
   
   obj.execute
+end
+
+#
+#
+def junit( classes, options = nil, &block )
+  JavaTools::exec_command(JavaTools::Junit.new(*classes), options, block)
 end

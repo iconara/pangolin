@@ -6,11 +6,13 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Theo Hultberg"]
-  s.date = %q{2009-08-06}
+  s.date = %q{2009-10-05}
   s.description = %q{Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run javac and jar, and although it's easy to run these as shell scripts you have to wait for the JVM to start. In combination with JRuby this gem lets you run javac and jar in your Rake scripts without exec'ing.}
   s.email = %q{theo@iconara.net}
+  s.extensions = ["Rakefile"]
   s.extra_rdoc_files = [
-    "README.rdoc"
+    "LICENSE",
+     "README.rdoc"
   ]
   s.files = [
     "README.rdoc",
@@ -24,10 +26,13 @@ Gem::Specification.new do |s|
      "lib/java_tools.rb",
      "lib/java_tools/jar.rb",
      "lib/java_tools/javac.rb",
+     "lib/java_tools/junit.rb",
      "spec/jar_cmd_spec.rb",
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
      "spec/javac_spec.rb",
+     "spec/junit_cmd_spec.rb",
+     "spec/junit_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
      "tasks/gem.rake",
@@ -44,7 +49,10 @@ Gem::Specification.new do |s|
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
      "spec/javac_spec.rb",
-     "spec/spec_helper.rb"
+     "spec/junit_cmd_spec.rb",
+     "spec/junit_spec.rb",
+     "spec/spec_helper.rb",
+     "examples/test/test.rb"
   ]
 
   if s.respond_to? :specification_version then

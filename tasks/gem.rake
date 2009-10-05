@@ -8,7 +8,9 @@ Jeweler::Tasks.new do |gemspec|
   gemspec.email = "theo@iconara.net"
   gemspec.homepage = "http://github.com/iconara/java_tools"
   gemspec.authors = ["Theo Hultberg"]
+  gemspec.extensions = 'Rakefile'
   gemspec.files.exclude '**/.gitignore'
+
 #  gemspec.platform = 'java'
 end
 
