@@ -46,12 +46,12 @@ module JavaTools
       @encoding             = nil
       @verbose              = false
     end
-
+  
     def command_args # :nodoc:
       args = [ ]
-      args << '-sourcepath' << @source_path.join(':') unless @source_path.empty?
+      args << '-sourcepath' << formatted_path(@source_path) unless @source_path.empty?
       args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
-      args << '-classpath' << @class_path.join(':') unless @class_path.empty?
+      args << '-classpath' << formatted_path(@class_path) unless @class_path.empty?
       args << '-deprecation' unless @deprecation_warnings
       args << '-nowarn' unless @warnings
       args << '-encoding' << @encoding if @encoding
@@ -60,9 +60,9 @@ module JavaTools
   
     def command_string # :nodoc:
       args = [ ]
-      args << '-sourcepath' << @source_path.join(':') unless @source_path.empty?
+      args << '-sourcepath' << formatted_path(@source_path) unless @source_path.empty?
       args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
-      args << '-classpath' << @class_path.join(':') unless @class_path.empty?
+      args << '-classpath' << formatted_path(@class_path) unless @class_path.empty?
       args << '-deprecation' unless @deprecation_warnings
       args << '-nowarn' unless @warnings
       args << '-encoding' << @encoding if @encoding
@@ -90,6 +90,16 @@ module JavaTools
         true
       else
         false
+      end
+    end
+    
+  private
+    
+    def formatted_path(items)
+      if items.respond_to? :join
+        items.join(':')
+      else
+        items.to_s
       end
     end
 

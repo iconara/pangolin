@@ -62,8 +62,14 @@ describe Javac do
       end
     end
 
-    it "should set the sourcepath to include the specified directory" do
+    it "should set the sourcepath to include the specified directory, when specified as a one item array" do
       @javac.source_path = ['path/to/src']
+  
+      @javac.command_string.should include('-sourcepath path/to/src')
+    end
+    
+    it "should set the sourcepath to include the specified directory, when specified as a string" do
+      @javac.source_path = 'path/to/src'
   
       @javac.command_string.should include('-sourcepath path/to/src')
     end
@@ -116,8 +122,14 @@ describe Javac do
       @javac.command_string.should_not include('-deprecation') 
     end
     
-    it "should set the classpath to the specified directory" do
+    it "should set the classpath to the specified directory, when specified as a one item array" do
       @javac.class_path = ['path/to/classes']
+
+      @javac.command_string.should include('-classpath path/to/classes')
+    end
+    
+    it "should set the classpath to the specified directory, when specified as a string" do
+      @javac.class_path = 'path/to/classes'
 
       @javac.command_string.should include('-classpath path/to/classes')
     end
