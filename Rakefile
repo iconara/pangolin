@@ -20,7 +20,7 @@ end
 # when running a rakefile as part of an install the 2>&1 redirect ends
 # ends up as an argument to Rake, and Rake complains, which makes the
 # build fail. The workaround is to declare a task with this name.
-task '2>&1'
+task '2>&1' => :default
 
 
 # Import all .rake-files in the tasks directory
