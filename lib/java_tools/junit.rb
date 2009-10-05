@@ -14,12 +14,17 @@ module JavaTools
 
   class Junit
     
+    include Output::Formatting
+    
+    
     attr_accessor :class_path
+    attr_accessor :colorize
     
 
     def initialize(*classes)
       @class_names = classes || [ ]
       @class_path  = [ ]
+      @colorize    = false
     end
   
     def classes
@@ -37,7 +42,7 @@ module JavaTools
   
     def print_result(result)
       if result.was_successful
-        puts '%d tests run in %.1f seconds, no failures' % [result.run_count, result.run_time/1000]
+        puts format_header('%d tests run in %.1f seconds, no failures' % [result.run_count, result.run_time/1000])
       else
         args = [
           result.run_count, 
@@ -46,18 +51,21 @@ module JavaTools
           result.failure_count == 1 ? '' : 's'
         ]
     
-        puts '%d tests run in %.1f seconds with %d failure%s:' % args
+        puts format_header('%d tests run in %.1f seconds with %d failure%s' % args)
         puts ''
       
         result.failures.each do |failure|
-          puts '- %s' % [failure.test_header]
-          puts '  %s' % [failure.message]
-          puts '  %s' % [trace_without_library_frames(failure.trace)]
+          puts format_error_header('- ' + failure.test_header)
+          puts format_error('  ' + failure.message)
+          
+          filtered_stack_trace_array(failure.trace).each do |trace_frame|
+            puts format_stack_trace('  ' + trace_frame.strip)
+          end
         end
       end
     end
     
-    def trace_without_library_frames(trace)
+    def filtered_stack_trace_array(trace)
       trace.split("\n").reject do |line|
         case line
         when /java.lang.AssertionError/, /at org.junit/, /at sun.reflect/, /at java.lang.reflect/, /at org.jruby/, /jrake/
@@ -65,8 +73,8 @@ module JavaTools
         else
           false
         end
-      end.join("\n")
-    end
+      end
+    end  
   
     def full_class_path
       @class_path + [JUNIT_JAR_PATH]

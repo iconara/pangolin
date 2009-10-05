@@ -15,7 +15,7 @@ task :compile => 'build' do
 end
 
 task :test => :compile do
-  junit FileList['build/**/Test*.class'].pathmap('%{build/,}X').gsub('/', '.'), :class_path => ['build/']
+  junit FileList['build/**/Test*.class'].pathmap('%{build/,}X').gsub('/', '.'), :class_path => ['build/'], :colorize => true
 end
 
 directory 'build'
