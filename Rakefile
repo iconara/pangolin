@@ -11,9 +11,13 @@ task :prepare do
   
   mkdir_p ext_dir
   
+  $stderr.print 'Downloading JUnit 4.7... '
+  
   File.open("#{ext_dir}/junit.jar", 'w') do |f|
     f.write(open(junit_url).read)
   end
+  
+  $stderr.puts 'done'
 end
 
 # This is a workaround for a silly bug in RubyGems on JRuby:
