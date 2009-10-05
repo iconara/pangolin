@@ -56,11 +56,13 @@ module JavaTools
       
         result.failures.each do |failure|
           puts format_error_header('- ' + failure.test_header)
-          puts format_error('  ' + failure.message)
+          puts format_error('  ' + failure.message) if failure.message
           
           filtered_stack_trace_array(failure.trace).each do |trace_frame|
             puts format_stack_trace('  ' + trace_frame.strip)
           end
+          
+          puts '' unless failure == result.failures.to_a.last
         end
       end
     end
