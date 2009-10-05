@@ -1,9 +1,11 @@
 raise "JavaTools requires JRuby" unless RUBY_PLATFORM =~ /\bjava\b/
 
 
+require File.expand_path(File.dirname(__FILE__)) + '/java_tools/output/formatting'
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/javac'
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/jar'
 require File.expand_path(File.dirname(__FILE__)) + '/java_tools/junit'
+
 
 
 module JavaTools # :nodoc:
