@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{java_tools}
-  s.version = "0.1.2"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Theo Hultberg"]
@@ -15,18 +15,23 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = [
-    "README.rdoc",
+    "LICENSE",
+     "README.rdoc",
      "Rakefile",
      "VERSION",
      "examples/compile/Rakefile",
      "examples/compile/src/com/example/HelloWorld.java",
      "examples/package/Rakefile",
      "examples/package/src/com/example/HelloWorld.java",
+     "examples/test/Rakefile",
+     "examples/test/src/com/example/HelloWorld.java",
+     "examples/test/test/com/example/TestHelloWorld.java",
      "java_tools.gemspec",
      "lib/java_tools.rb",
      "lib/java_tools/jar.rb",
      "lib/java_tools/javac.rb",
      "lib/java_tools/junit.rb",
+     "lib/java_tools/output/formatting.rb",
      "spec/jar_cmd_spec.rb",
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
@@ -51,8 +56,7 @@ Gem::Specification.new do |s|
      "spec/javac_spec.rb",
      "spec/junit_cmd_spec.rb",
      "spec/junit_spec.rb",
-     "spec/spec_helper.rb",
-     "examples/test/test.rb"
+     "spec/spec_helper.rb"
   ]
 
   if s.respond_to? :specification_version then
