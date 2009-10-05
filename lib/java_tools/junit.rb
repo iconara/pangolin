@@ -1,3 +1,9 @@
+JUNIT_JAR_PATH = File.dirname(__FILE__) + '/ext/junit.jar'
+
+
+require JUNIT_JAR_PATH
+
+
 include_class 'java.lang.ClassLoader'
 include_class 'java.lang.ClassNotFoundException'
 include_class 'java.net.URLClassLoader'
@@ -24,13 +30,46 @@ module JavaTools
       junit  = load_class('org.junit.runner.JUnitCore').new_instance
       result = junit.run(class_instances)
       
-      puts "%d/%d" % [result.run_count, result.failure_count]
+      print_result(result)
     end
-  
+      
   private
   
+    def print_result(result)
+      if result.was_successful
+        puts '%d tests run in %.1f seconds, no failures' % [result.run_count, result.run_time/1000]
+      else
+        args = [
+          result.run_count, 
+          result.run_time/1000, 
+          result.failure_count, 
+          result.failure_count == 1 ? '' : 's'
+        ]
+    
+        puts '%d tests run in %.1f seconds with %d failure%s:' % args
+        puts ''
+      
+        result.failures.each do |failure|
+          puts '- %s' % [failure.test_header]
+          puts '  %s' % [failure.message]
+          puts '  %s' % [trace_without_library_frames(failure.trace)]
+        end
+      end
+    end
+    
+    def trace_without_library_frames(trace)
+      trace.split("\n").reject do |line|
+        case line
+        when /java.lang.AssertionError/, /at org.junit/, /at sun.reflect/, /at java.lang.reflect/, /at org.jruby/, /jrake/
+          true
+        else
+          false
+        end
+      end.join("\n")
+    end
+  
     def full_class_path
-      @class_path + [File.dirname(__FILE__) + '/ext/junit.jar']
+      @class_path + [JUNIT_JAR_PATH]
     end
   
     def pretty_class_path
