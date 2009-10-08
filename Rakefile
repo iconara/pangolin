@@ -6,18 +6,21 @@ task :default => :prepare
 task :prepare do
   require 'open-uri'
   
-  junit_url = "http://downloads.sourceforge.net/project/junit/junit/4.7/junit-4.7.jar"
-  ext_dir   = 'lib/java_tools/ext'
+  junit_url  = "http://downloads.sourceforge.net/project/junit/junit/4.7/junit-4.7.jar"
+  ext_dir    = 'lib/java_tools/ext'
+  local_path = "#{ext_dir}/junit.jar"
   
-  mkdir_p ext_dir
+  unless File.exists?(local_path)
+    mkdir_p ext_dir
+    
+    $stderr.print 'Downloading JUnit 4.7... '
   
-  $stderr.print 'Downloading JUnit 4.7... '
+    File.open(local_path, 'w') do |f|
+      f.write(open(junit_url).read)
+    end
   
-  File.open("#{ext_dir}/junit.jar", 'w') do |f|
-    f.write(open(junit_url).read)
+    $stderr.puts 'done'
   end
-  
-  $stderr.puts 'done'
 end
 
 # This is a workaround for a silly bug in RubyGems on JRuby:
