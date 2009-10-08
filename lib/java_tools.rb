@@ -69,13 +69,13 @@ end
 # and the configuration directives should be set on that.
 #
 # The possible configuration directives are:
-# * source_path
-# * destination
-# * class_path
-# * deprecation_warnings
-# * warnings
-# * encoding
-# * verbose
+# * +source_path+
+# * +destination+
+# * +class_path+
+# * +deprecation_warnings+
+# * +warnings+
+# * +encoding+
+# * +verbose+
 #
 # The directives are the same as the properties of JavaTools::Javac.
 #
@@ -99,12 +99,12 @@ end
 # and the configuration directives should be set on that.
 #
 # The possible configuration directives are:
-# * base_dir
-# * compression
-# * verbose
+# * +base_dir+
+# * +compression+
+# * +verbose+
 #
-# The directives are the same as the properties of JavaTools::Javac.
-def jar( output, files = nil, options = nil )
+# The directives are the same as the properties of JavaTools::Jar.
+#
 def jar( output, files = nil, options = nil, &block )
   base_dir = nil
   
@@ -115,7 +115,28 @@ def jar( output, files = nil, options = nil, &block )
   JavaTools::exec_command(JavaTools::Jar.new(output, files, base_dir), options, block)
 end
 
+# Junit can be run in either command or yield mode: command mode
+# looks roughly like this:
 #
+#   junit ['TestFoo', 'TestBar'], :class_path => ['build']
+#
+# (where +TestFoo+ and +TestBar+ are classes available from the class path).
+#
+# Yield mode looks like this:
+#
+#   junit ['TestFoo', 'TestBar'] do |conf|
+#     conf.class_path = ['build']
+#   end
+#
+# In command mode you pass a hash with the configuration directives
+# (listed below) and in yield mode an object is passed to the block,
+# and the configuration directives should be set on that.
+#
+# The possible configuration directives are:
+# * +class_path+
+# * +colorize+
+#
+# The directives are the same as the properties of JavaTools::Junit.
 #
 def junit( classes, options = nil, &block )
   JavaTools::exec_command(JavaTools::Junit.new(*classes), options, block)
