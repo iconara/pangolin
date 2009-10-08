@@ -19,19 +19,23 @@ module JavaTools
     
     attr_accessor :class_path
     attr_accessor :colorize
+    attr_accessor :verbose
     
 
     def initialize(*classes)
       @class_names = classes || [ ]
       @class_path  = [ ]
       @colorize    = false
+      @verbose     = false
     end
   
     def classes
       @class_names
     end
   
-    def execute
+    def execute(io=$stderr)
+      io.puts 'junit …' if @verbose
+      
       junit  = load_class('org.junit.runner.JUnitCore').new_instance
       result = junit.run(class_instances)
       
