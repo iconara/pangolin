@@ -95,29 +95,29 @@ describe Javac do
     it "should not add the d flag if destination is nil" do
       @javac.destination = nil
       
-      @javac.command_string.should_not include('-d')
+      @javac.command_string.should_not match(/-d\b/)
     end
     
     it "should not add the d flag if destination is an empty string" do
       @javac.destination = ""
       
-      @javac.command_string.should_not include('-d')
+      @javac.command_string.should_not match(/-d\b/)
     end
     
     it "should not add the d flag if destination is only whitespace" do
       @javac.destination = "  \t"
     
-      @javac.command_string.should_not include('-d')
+      @javac.command_string.should_not match(/-d\b/)
     end
     
-    it "should set the deprecation flag when deprecation_warnings is false" do
-      @javac.deprecation_warnings = false
+    it "should set the deprecation flag when deprecation_warnings is true" do
+      @javac.deprecation_warnings = true
       
       @javac.command_string.should include('-deprecation')
     end
     
-    it "should not set the deprecation flag when deprecation_warnings is true" do
-      @javac.deprecation_warnings = true
+    it "should not set the deprecation flag when deprecation_warnings is false" do
+      @javac.deprecation_warnings = false
       
       @javac.command_string.should_not include('-deprecation') 
     end

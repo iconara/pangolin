@@ -52,7 +52,7 @@ module JavaTools
       args << '-sourcepath' << formatted_path(@source_path) unless @source_path.empty?
       args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
       args << '-classpath' << formatted_path(@class_path) unless @class_path.empty?
-      args << '-deprecation' unless @deprecation_warnings
+      args << '-deprecation' if @deprecation_warnings
       args << '-nowarn' unless @warnings
       args << '-encoding' << @encoding if @encoding
       args + @source_files
@@ -63,7 +63,7 @@ module JavaTools
       args << '-sourcepath' << formatted_path(@source_path) unless @source_path.empty?
       args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
       args << '-classpath' << formatted_path(@class_path) unless @class_path.empty?
-      args << '-deprecation' unless @deprecation_warnings
+      args << '-deprecation' if @deprecation_warnings
       args << '-nowarn' unless @warnings
       args << '-encoding' << @encoding if @encoding
 
