@@ -20,12 +20,12 @@ module JavaTools # :nodoc:
   
   def self.exec_command( obj, options, block )
     if block
-      yield obj
+      block.call(obj)
     elsif options
       configure_command(obj, options)
     end
 
-    obj.execute
+    obj.execute or fail("Execution failed, see above")
   end
   
   def self.configure_command( command, options ) # :nodoc:
@@ -78,16 +78,9 @@ end
 # * verbose
 #
 # The directives are the same as the properties of JavaTools::Javac.
-def javac( source_files, options = nil )
-  obj = JavaTools::Javac.new(*source_files)
-  
-  if block_given?
-    yield obj
-  elsif options
-    JavaTools::configure_command(obj, options)
-  end
-  
-  obj.execute
+#
+def javac( source_files, options = nil, &block )
+  JavaTools::exec_command(JavaTools::Javac.new(*source_files), options, block)
 end
 
 # Jar can be run in either command or yield mode: command mode
@@ -112,21 +105,14 @@ end
 #
 # The directives are the same as the properties of JavaTools::Javac.
 def jar( output, files = nil, options = nil )
+def jar( output, files = nil, options = nil, &block )
   base_dir = nil
   
   if options && options[:base_dir]
     base_dir = options[:base_dir]
   end
   
-  obj = JavaTools::Jar.new(output, files, base_dir)
-  
-  if block_given?
-    yield obj
-  elsif options
-    JavaTools::configure_command(obj, options)
-  end
-  
-  obj.execute
+  JavaTools::exec_command(JavaTools::Jar.new(output, files, base_dir), options, block)
 end
 
 #
