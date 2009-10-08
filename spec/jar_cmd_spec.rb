@@ -16,7 +16,7 @@ describe "jar command" do
     
     Jar.should_receive(:new).with(output, files, nil).and_return do
       instance = mock('JarInstance')
-      instance.should_receive(:execute)
+      instance.should_receive(:execute).and_return(true)
       instance
     end
     
@@ -54,7 +54,7 @@ describe "jar command" do
   it "should call #execute after yielding" do
     Jar.should_receive(:new).and_return do
       instance = mock('JarInstance')
-      instance.should_receive(:execute)
+      instance.should_receive(:execute).and_return(true)
       instance
     end
     
@@ -69,6 +69,15 @@ describe "jar command" do
     jar 'archive.jar', :compression => 4
   end
   
+  it "should fail if #execute returns false" do
+    instance = mock('Jar')
+    instance.should_receive(:execute).and_return(false)
+    
+    Jar.should_receive(:new).and_return(instance)
+    
+    lambda { jar 'archive.jar' }.should raise_error
+  end
+  
   it "should set the properties specified in the options parameter" do
     base_dir    = 'build'
     compression = 4
@@ -78,7 +87,7 @@ describe "jar command" do
       instance.should_receive(:base_dir=).with(base_dir)
       instance.should_receive(:compression=).with(compression)
       instance.should_receive(:verbose=).with(false)
-      instance.should_receive(:execute)
+      instance.should_receive(:execute).and_return(true)
       instance
     end
     
@@ -105,7 +114,7 @@ describe "jar command" do
   
   def create_non_exec_jar( output, files = nil )
     instance = Jar.new(output, files)
-    instance.should_receive(:execute) # stop the real #execute from being called    
+    instance.should_receive(:execute).and_return(true) # stop the real #execute from being called    
     instance
   end
   

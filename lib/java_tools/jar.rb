@@ -140,6 +140,8 @@ module JavaTools
       
       commit_manifest
       create_zipfile
+      
+      true
     end
     
     def create_zipfile # :nodoc:

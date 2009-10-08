@@ -4,7 +4,7 @@ describe "javac command" do
     files = ['one/two.java', 'three/four.java']
     
     instance = Javac.new(*files)
-    instance.should_receive(:execute) # stop the real execute from being called
+    instance.should_receive(:execute).and_return(true) # stop the real execute from being called
     
     Javac.should_receive(:new).with(*files).and_return(instance)
     
@@ -14,7 +14,7 @@ describe "javac command" do
   it "should yield a Javac object if a block is given" do
     # prepare a stub that prevents the real #execute being called
     instance = Javac.new
-    instance.should_receive(:execute)
+    instance.should_receive(:execute).and_return(true)
     
     Javac.should_receive(:new).and_return(instance)
     
@@ -32,7 +32,7 @@ describe "javac command" do
     Javac.should_receive(:new).and_return do
       instance.should_receive(:destination=).with(destination)
       instance.should_receive(:source_path=).with(source_path)
-      instance.should_receive(:execute) # stop the real execute from being called
+      instance.should_receive(:execute).and_return(true) # stop the real execute from being called
       instance
     end
     
@@ -45,7 +45,7 @@ describe "javac command" do
   it "should call #execute after yielding" do
     Javac.should_receive(:new).and_return do
       instance = mock('JavacInstance')
-      instance.should_receive(:execute)
+      instance.should_receive(:execute).and_return(true)
       instance
     end
     
@@ -58,11 +58,20 @@ describe "javac command" do
     instance = Javac.new(*files)
     
     Javac.should_receive(:new).with(*files).and_return do
-      instance.should_receive(:execute)
+      instance.should_receive(:execute).and_return(true)
       instance
     end
     
     javac files, :destination => 'build'
+  end
+  
+  it "should fail if #execute returns false" do
+    instance = mock('Javac')
+    instance.should_receive(:execute).and_return(false)
+    
+    Javac.should_receive(:new).and_return(instance)
+    
+    lambda { javac ['Hello', 'World'] }.should raise_error
   end
   
   it "should set the properties specified in the options parameter" do
@@ -76,7 +85,7 @@ describe "javac command" do
       instance.should_receive(:destination=).with(destination)
       instance.should_receive(:source_path=).with(source_path)
       instance.should_receive(:warnings=).with(false)
-      instance.should_receive(:execute) # stop the real execute from being called
+      instance.should_receive(:execute).and_return(true) # stop the real execute from being called
       instance
     end
     

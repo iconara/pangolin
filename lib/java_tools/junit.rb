@@ -36,6 +36,8 @@ module JavaTools
       result = junit.run(class_instances)
       
       print_result(result)
+      
+      0 == result.failure_count
     end
       
   private
