@@ -50,7 +50,7 @@ describe Javac do
     
   end
     
-  describe "#command_string" do
+  describe '#command_args' do
     
     it "should include all named source files in the command args" do
       source_files = ['Main.java', 'com/example/Something.java']
@@ -65,103 +65,103 @@ describe Javac do
     it "should set the sourcepath to include the specified directory, when specified as a one item array" do
       @javac.source_path = ['path/to/src']
   
-      @javac.command_string.should include('-sourcepath path/to/src')
+      @javac.command_args.join(' ').should include('-sourcepath path/to/src')
     end
     
     it "should set the sourcepath to include the specified directory, when specified as a string" do
       @javac.source_path = 'path/to/src'
   
-      @javac.command_string.should include('-sourcepath path/to/src')
+      @javac.command_args.join(' ').should include('-sourcepath path/to/src')
     end
     
     it "should set the sourcepath to include the specified directories" do
       @javac.source_path = ['path/to/src', 'another/path', 'sources']
   
-      @javac.command_string.should include('-sourcepath path/to/src:another/path:sources')
+      @javac.command_args.join(' ').should include('-sourcepath path/to/src:another/path:sources')
     end
     
     it "should not add the sourcepath flag if source_path is empty" do
       @javac.source_path = [ ]
       
-      @javac.command_string.should_not include('-sourcepath')
+      @javac.command_args.should_not include('-sourcepath')
     end
 
     it "should set the destination directory to the specified directory" do
       @javac.destination = 'path/to/build'
   
-      @javac.command_string.should include('-d path/to/build')
+      @javac.command_args.join(' ').should include('-d path/to/build')
     end
   
     it "should not add the d flag if destination is nil" do
       @javac.destination = nil
       
-      @javac.command_string.should_not match(/-d\b/)
+      @javac.command_args.join(' ').should_not match(/-d\b/)
     end
     
     it "should not add the d flag if destination is an empty string" do
       @javac.destination = ""
       
-      @javac.command_string.should_not match(/-d\b/)
+      @javac.command_args.join(' ').should_not match(/-d\b/)
     end
     
     it "should not add the d flag if destination is only whitespace" do
       @javac.destination = "  \t"
     
-      @javac.command_string.should_not match(/-d\b/)
+      @javac.command_args.join(' ').should_not match(/-d\b/)
     end
     
     it "should set the deprecation flag when deprecation_warnings is true" do
       @javac.deprecation_warnings = true
       
-      @javac.command_string.should include('-deprecation')
+      @javac.command_args.should include('-deprecation')
     end
     
     it "should not set the deprecation flag when deprecation_warnings is false" do
       @javac.deprecation_warnings = false
       
-      @javac.command_string.should_not include('-deprecation') 
+      @javac.command_args.should_not include('-deprecation') 
     end
     
     it "should set the classpath to the specified directory, when specified as a one item array" do
       @javac.class_path = ['path/to/classes']
 
-      @javac.command_string.should include('-classpath path/to/classes')
+      @javac.command_args.join(' ').should include('-classpath path/to/classes')
     end
     
     it "should set the classpath to the specified directory, when specified as a string" do
       @javac.class_path = 'path/to/classes'
 
-      @javac.command_string.should include('-classpath path/to/classes')
+      @javac.command_args.join(' ').should include('-classpath path/to/classes')
     end
     
     it "should set the classpath to the specified directories and files" do
       @javac.class_path = ['path/to/classes', 'lib/dependency.jar']
 
-      @javac.command_string.should include('-classpath path/to/classes:lib/dependency.jar')
+      @javac.command_args.join(' ').should include('-classpath path/to/classes:lib/dependency.jar')
     end
     
     it "should not set the encoding flag if encoding is nil" do
       @javac.encoding = nil
       
-      @javac.command_string.should_not include('-encoding')
+      @javac.command_args.should_not include('-encoding')
     end
     
     it "should set the encoding flag when encoding is set" do
       @javac.encoding = 'Shift_JIS'
       
-      @javac.command_string.should include('-encoding Shift_JIS')
+      @javac.command_args.join(' ').should include('-encoding Shift_JIS')
     end
     
     it "should set the nowarn flag when warnings is false" do
       @javac.warnings = false
       
-      @javac.command_string.should include('-nowarn')
+      @javac.command_args.should include('-nowarn')
     end
     
     it "should not set the nowarn flag when warnings is true" do
       @javac.warnings = true
       
-      @javac.command_string.should_not include('-nowarn')
+      @javac.command_args.should_not include('-nowarn')
     end
 
   end

@@ -136,7 +136,7 @@ module JavaTools
       
       compression_flag = @compression == 0 ? '0' : ''
       
-      io.puts "jar -c#{compression_flag}f #{@output} …" if @verbose
+      io.puts 'jar …' if @verbose
       
       commit_manifest
       create_zipfile

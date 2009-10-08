@@ -47,40 +47,15 @@ module JavaTools
       @verbose              = false
     end
   
-    def command_args # :nodoc:
-      args = [ ]
-      args << '-sourcepath' << formatted_path(@source_path) unless @source_path.empty?
-      args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
-      args << '-classpath' << formatted_path(@class_path) unless @class_path.empty?
-      args << '-deprecation' if @deprecation_warnings
-      args << '-nowarn' unless @warnings
-      args << '-encoding' << @encoding if @encoding
-      args + @source_files
-    end
-  
-    def command_string # :nodoc:
-      args = [ ]
-      args << '-sourcepath' << formatted_path(@source_path) unless @source_path.empty?
-      args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
-      args << '-classpath' << formatted_path(@class_path) unless @class_path.empty?
-      args << '-deprecation' if @deprecation_warnings
-      args << '-nowarn' unless @warnings
-      args << '-encoding' << @encoding if @encoding
-
-      "javac #{args.join(' ')} …"
-    end
-
     # Run javac. If #verbose is true the equivalent command string for
     # the +javac+ command will be printed to the stream passed as +io+ (or
     # +$stdout+ by default)
     def execute( io = $stderr )
       output_writer = StringWriter.new
   
-      args = command_args.to_java(java.lang.String)
+      io.puts 'javac …' if @verbose
   
-      result = com.sun.tools.javac.Main.compile(args, PrintWriter.new(output_writer))
-      
-      io.puts command_string if @verbose
+      result = execute_compiler(output_writer)
       
       output_str = output_writer.to_s
       
@@ -93,8 +68,23 @@ module JavaTools
       end
     end
     
-  private
+    def command_args # :nodoc:
+      args = [ ]
+      args << '-sourcepath' << formatted_path(@source_path) unless @source_path.empty?
+      args << '-d' << @destination unless (@destination.nil? || @destination =~ /^\s*$/)
+      args << '-classpath' << formatted_path(@class_path) unless @class_path.empty?
+      args << '-deprecation' if @deprecation_warnings
+      args << '-nowarn' unless @warnings
+      args << '-encoding' << @encoding if @encoding
+      args + @source_files
+    end
     
+  private
+  
+    def execute_compiler(args, output_writer)
+      com.sun.tools.javac.Main.compile(command_args.to_java(java.lang.String), PrintWriter.new(output_writer))
+    end
+        
     def formatted_path(items)
       if items.respond_to? :join
         items.join(':')
