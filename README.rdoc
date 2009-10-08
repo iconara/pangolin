@@ -16,13 +16,33 @@ Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only t
   task :dist => :compile do
     jar 'dist/my-awsome-app.jar', FileList['build/**/*.class'], :base_dir => 'build'
   end
+
+  task :test => :compile do
+    test_classes = FileList['build/**/Test*.class'].pathmap('%{build/,}X').gsub('/', '.')
+
+    junit test_classes, :class_path => FileList['build', 'lib/*.jar']
+  end
 	
 There are more examples in the +examples+ directory.
 
 == Installation
 
-  jruby -S gem sources -a http://gems.github.com
+The new way, from Gemcutter:
+
+  sudo jruby -S gem install java_tools
+
+To add Gemcutter as a gem source, run these commands:
+
+  jruby -S gem install gemcutter
+  jruby -S gem tumble
+  
+The old way, from GitHub:
+
   sudo jruby -S gem install iconara-java_tools
+
+To add GitHub as a gem source, run this command:
+
+  jruby -S gem sources -a http://gems.github.com
 
 == Command style
 
