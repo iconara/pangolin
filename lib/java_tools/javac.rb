@@ -34,6 +34,29 @@ module JavaTools
     # Whether or not to print the equivalent command string to the output (see #execute)
     attr_accessor :verbose
     
+    # Enable or diable specific warnings by adding their names to this list.
+    # The possible values are:
+    # * all
+    # * cast
+    # * deprecation
+    # * divzero
+    # * empty
+    # * unchecked
+    # * fallthrough
+    # * path
+    # * serial
+    # * finally
+    # * overrides
+    # * none
+    # Prefix with '-' to disable.
+    attr_accessor :lint
+
+    # Determines the maximum number of errors to print, default (nil) is to print all
+    attr_accessor :max_errors
+    
+    # Determines the maximum number of warnings to print, default (nil) is to print all
+    attr_accessor :max_warnings
+
 
     def initialize( *source_files )
       @source_files = source_files || [ ]
@@ -45,6 +68,7 @@ module JavaTools
       @warnings             = true
       @encoding             = nil
       @verbose              = false
+      @lint                 = [ ]
     end
   
     # Run javac. If #verbose is true the equivalent command string for
@@ -76,12 +100,18 @@ module JavaTools
       args << '-deprecation' if @deprecation_warnings
       args << '-nowarn' unless @warnings
       args << '-encoding' << @encoding if @encoding
-      args + @source_files
+      args << '-Xmaxerrs' << @max_errors if @max_errors
+      args << '-Xmaxwarns' << @max_warnings if @max_warnings 
+      args + lint_flags + @source_files
     end
     
   private
   
-    def execute_compiler(args, output_writer)
+    def lint_flags
+      @lint.map { |lint| '-Xlint:' + lint }
+    end
+  
+    def execute_compiler(output_writer)
       com.sun.tools.javac.Main.compile(command_args.to_java(java.lang.String), PrintWriter.new(output_writer))
     end
         

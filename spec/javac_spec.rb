@@ -163,6 +163,40 @@ describe Javac do
       
       @javac.command_args.should_not include('-nowarn')
     end
+    
+    it 'should set -Xlint:abc for all values in the lint options' do
+      @javac.lint << 'empty'
+      @javac.lint << '-cast'
+      @javac.lint << 'divzero'
+      
+      @javac.command_args.should include('-Xlint:empty')
+      @javac.command_args.should include('-Xlint:-cast')
+      @javac.command_args.should include('-Xlint:divzero')
+    end
+    
+    it 'should not set any -Xlint:abc flags when the lint option is empty' do
+      @javac.command_args.join(' ').should_not include('-Xlint')
+    end
+    
+    it 'should set -Xmaxerrs when the max_errors option is set' do
+      @javac.max_errors = 10
+      
+      @javac.command_args.join(' ').should include('-Xmaxerrs 10')
+    end
+    
+    it 'should not -Xmaxerrs when the max_errors option is not set' do
+      @javac.command_args.should_not include('-Xmaxerrs')
+    end
+    
+    it 'should set -Xmaxwarns when the max_warnings option is set' do
+      @javac.max_warnings = 5
+      
+      @javac.command_args.join(' ').should include('-Xmaxwarns 5')
+    end
+    
+    it 'should not -Xmaxerrs when the max_errors option is not set' do
+      @javac.command_args.should_not include('-Xmaxwarns')
+    end
 
   end
   
