@@ -1,14 +1,14 @@
-raise "JavaTools requires JRuby" unless RUBY_PLATFORM =~ /\bjava\b/
+raise "Pangolin requires JRuby" unless RUBY_PLATFORM =~ /\bjava\b/
 
 
-require File.expand_path(File.dirname(__FILE__)) + '/java_tools/output/formatting'
-require File.expand_path(File.dirname(__FILE__)) + '/java_tools/javac'
-require File.expand_path(File.dirname(__FILE__)) + '/java_tools/jar'
-require File.expand_path(File.dirname(__FILE__)) + '/java_tools/junit'
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/output/formatting'
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/javac'
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/jar'
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/junit'
 
 
 
-module JavaTools # :nodoc:
+module Pangolin # :nodoc:
   
   def self.version # :nodoc:
     version_file = File.join(File.dirname(__FILE__), '..', 'VERSION')
@@ -77,10 +77,10 @@ end
 # * +encoding+
 # * +verbose+
 #
-# The directives are the same as the properties of JavaTools::Javac.
+# The directives are the same as the properties of Pangolin::Javac.
 #
 def javac( source_files, options = nil, &block )
-  JavaTools::exec_command(JavaTools::Javac.new(*source_files), options, block)
+  Pangolin::exec_command(Pangolin::Javac.new(*source_files), options, block)
 end
 
 # Jar can be run in either command or yield mode: command mode
@@ -103,7 +103,7 @@ end
 # * +compression+
 # * +verbose+
 #
-# The directives are the same as the properties of JavaTools::Jar.
+# The directives are the same as the properties of Pangolin::Jar.
 #
 def jar( output, files = nil, options = nil, &block )
   base_dir = nil
@@ -112,7 +112,7 @@ def jar( output, files = nil, options = nil, &block )
     base_dir = options[:base_dir]
   end
   
-  JavaTools::exec_command(JavaTools::Jar.new(output, files, base_dir), options, block)
+  Pangolin::exec_command(Pangolin::Jar.new(output, files, base_dir), options, block)
 end
 
 # Junit can be run in either command or yield mode: command mode
@@ -136,8 +136,8 @@ end
 # * +class_path+
 # * +colorize+
 #
-# The directives are the same as the properties of JavaTools::Junit.
+# The directives are the same as the properties of Pangolin::Junit.
 #
 def junit( classes, options = nil, &block )
-  JavaTools::exec_command(JavaTools::Junit.new(*classes), options, block)
+  Pangolin::exec_command(Pangolin::Junit.new(*classes), options, block)
 end

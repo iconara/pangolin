@@ -1,4 +1,4 @@
-= Java Tools
+= Pangolin
 
 Ruby wrappers for javac and jar that don't just exec.
 
@@ -6,7 +6,7 @@ Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only t
 
 == Example
 
-  require 'java_tools'
+  require 'pangolin'
 
 
   task :compile do
@@ -29,16 +29,12 @@ There are more examples in the +examples+ directory.
 
 The new way, from Gemcutter:
 
-  sudo jruby -S gem install java_tools
+  sudo jruby -S gem install pangolin
 
 To add Gemcutter as a gem source, run these commands:
 
   jruby -S gem install gemcutter
   jruby -S gem tumble
-  
-The old way, from GitHub:
-
-  sudo jruby -S gem install iconara-java_tools
 
 To add GitHub as a gem source, run this command:
 
@@ -69,4 +65,8 @@ you'll notice that the startup time decreases significantly the second time you 
 
 == Upcomming
 
-Even though the whole rationale behind Java Tools is to avoid exec it wouldn't be much effort to support non-JRuby runtimes since at least the +javac+ command needs to build the command string anyway.
+Even though the whole rationale behind Pangolin is to avoid exec it wouldn't be much effort to support non-JRuby runtimes since at least the +javac+ command needs to build the command string anyway.
+
+== Pangolin?
+
+Pangolins eats ants for breakfast.

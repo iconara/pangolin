@@ -10,7 +10,7 @@ include_class 'java.net.URLClassLoader'
 include_class 'java.net.URL'
 
 
-module JavaTools
+module Pangolin
 
   class Junit
     

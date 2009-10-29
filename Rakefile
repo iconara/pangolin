@@ -7,7 +7,7 @@ task :prepare do
   require 'open-uri'
   
   junit_url  = "http://downloads.sourceforge.net/project/junit/junit/4.7/junit-4.7.jar"
-  ext_dir    = 'lib/java_tools/ext'
+  ext_dir    = 'lib/pangolin/ext'
   local_path = "#{ext_dir}/junit.jar"
   
   unless File.exists?(local_path)

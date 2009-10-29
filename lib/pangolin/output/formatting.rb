@@ -1,4 +1,4 @@
-module JavaTools
+module Pangolin
 	module Output
 	  module Formatting
 

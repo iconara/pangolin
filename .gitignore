@@ -1,4 +1,4 @@
 .DS_Store
 pkg
 docs
-lib/java_tools/ext/*.jar
+lib/pangolin/ext/*.jar

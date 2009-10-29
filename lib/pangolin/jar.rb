@@ -1,7 +1,7 @@
 require 'java'
 
 
-module JavaTools
+module Pangolin
 
   include_class 'java.io.FileOutputStream'
   include_class 'java.util.zip.ZipOutputStream'
@@ -78,7 +78,7 @@ module JavaTools
     
     def default_manifest # :nodoc:
       {
-        'Built-By' => "JavaTools v#{JavaTools::version}",
+        'Built-By' => "Pangolin v#{Pangolin::version}",
         'Manifest-Version' => '1.0'
       }
     end
