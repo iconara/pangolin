@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{pangolin}
-  s.version = "0.3.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Theo Hultberg"]
@@ -29,12 +29,12 @@ Gem::Specification.new do |s|
      "examples/test/Rakefile",
      "examples/test/src/com/example/HelloWorld.java",
      "examples/test/test/com/example/TestHelloWorld.java",
-     "java_tools.gemspec",
      "lib/pangolin.rb",
      "lib/pangolin/jar.rb",
      "lib/pangolin/javac.rb",
      "lib/pangolin/junit.rb",
      "lib/pangolin/output/formatting.rb",
+     "pangolin.gemspec",
      "spec/jar_cmd_spec.rb",
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
