@@ -4,12 +4,12 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{java_tools}
-  s.version = "0.2.2"
+  s.name = %q{pangolin}
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Theo Hultberg"]
-  s.date = %q{2009-10-08}
+  s.date = %q{2009-10-29}
   s.description = %q{Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run javac and jar, and although it's easy to run these as shell scripts you have to wait for the JVM to start. In combination with JRuby this gem lets you run javac and jar in your Rake scripts without exec'ing.}
   s.email = %q{theo@iconara.net}
   s.extensions = ["Rakefile"]
@@ -30,11 +30,11 @@ Gem::Specification.new do |s|
      "examples/test/src/com/example/HelloWorld.java",
      "examples/test/test/com/example/TestHelloWorld.java",
      "java_tools.gemspec",
-     "lib/java_tools.rb",
-     "lib/java_tools/jar.rb",
-     "lib/java_tools/javac.rb",
-     "lib/java_tools/junit.rb",
-     "lib/java_tools/output/formatting.rb",
+     "lib/pangolin.rb",
+     "lib/pangolin/jar.rb",
+     "lib/pangolin/javac.rb",
+     "lib/pangolin/junit.rb",
+     "lib/pangolin/output/formatting.rb",
      "spec/jar_cmd_spec.rb",
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
@@ -47,7 +47,7 @@ Gem::Specification.new do |s|
      "tasks/rdoc.rake",
      "tasks/spec.rake"
   ]
-  s.homepage = %q{http://github.com/iconara/java_tools}
+  s.homepage = %q{http://github.com/iconara/pangolin}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.3}
