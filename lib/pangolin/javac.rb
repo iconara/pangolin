@@ -2,6 +2,11 @@ require 'java'
 
 
 module Pangolin
+  
+  TOOLS_PATHS = [
+    File.join(ENV['JAVA_HOME'], '..', 'lib', 'tools.jar'),
+    File.join(ENV['JAVA_HOME'], 'lib', 'tools.jar')
+  ]
 
   # must use include_class instead of import because import interferes with Rake's import
   include_class 'java.io.PrintWriter'
@@ -112,7 +117,27 @@ module Pangolin
     end
   
     def execute_compiler(output_writer)
-      com.sun.tools.javac.Main.compile(command_args.to_java(java.lang.String), PrintWriter.new(output_writer))
+      compiler.compile(command_args.to_java(java.lang.String), PrintWriter.new(output_writer))
+    end
+    
+    def compiler
+      begin
+        return com.sun.tools.javac.Main
+      rescue NameError
+        TOOLS_PATHS.each do |path|
+          if File.exists? path
+            require path
+
+            begin
+              return com.sun.tools.javac.Main
+            rescue NameError
+              # ignore and try next
+            end
+          end
+        end
+      end
+      
+      raise 'Could not find com.sun.tools.javac.Main, perhaps tools.jar isn\'t in the class path?'
     end
         
     def formatted_path(items)
