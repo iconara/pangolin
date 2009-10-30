@@ -2,7 +2,7 @@
 
 Ruby wrappers for javac and jar that don't just exec.
 
-Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run +javac+ and +jar+, and although it's easy to run these with exec you have to wait for the JVM to start for each invocation. In combination with JRuby this gem lets you run +javac+ and +jar+ in your Rake scripts without exec'ing, by using the programmatic interface to Javac and Java's ZIP file creation capabilities.
+Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run +javac+, +jar+ and your JUnit tests, and although it's easy to run these with exec you have to wait for the JVM to start for each invocation. In combination with JRuby this gem lets you run +javac+,  +jar+ and +junit+ in your Rake scripts without exec'ing, and you don't have to write XML to do it. Pangolin uses the the programmatic interface to Javac, Java's ZIP file creation capabilities and the JUnit command line runner to do it's magic.
 
 == Example
 
@@ -23,22 +23,13 @@ Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only t
     junit test_classes, :class_path => FileList['build', 'lib/*.jar']
   end
 	
-There are more examples in the +examples+ directory.
+There are more examples in the +examples+ directory (just cd to one of the directories under +examples+ and run +jruby -S rake+, or +jrake+ if you have it).
 
 == Installation
 
-The new way, from Gemcutter:
+Pangolin is available as a gem from Gemcutter:
 
-  sudo jruby -S gem install pangolin
-
-To add Gemcutter as a gem source, run these commands:
-
-  jruby -S gem install gemcutter
-  jruby -S gem tumble
-
-To add GitHub as a gem source, run this command:
-
-  jruby -S gem sources -a http://gems.github.com
+  sudo jruby -S gem install pangolin -s http://gemcutter.org
 
 == Command style
 
