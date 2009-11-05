@@ -1,5 +1,7 @@
 raise "Pangolin requires JRuby" unless RUBY_PLATFORM =~ /\bjava\b/
 
+$stderr.puts "Warning: JAVA_HOME not set, this may cause problems" unless ENV['JAVA_HOME']
+
 
 require File.expand_path(File.dirname(__FILE__)) + '/pangolin/output/formatting'
 require File.expand_path(File.dirname(__FILE__)) + '/pangolin/javac'
