@@ -13,6 +13,9 @@ module Pangolin
 
 
   class Javac
+    
+    include Output::Formatting
+    
 
     # The files to compile.
     attr_accessor :source_files
@@ -60,6 +63,8 @@ module Pangolin
     
     # Determines the maximum number of warnings to print, default (nil) is to print all
     attr_accessor :max_warnings
+    
+    attr_accessor :colorize
 
 
     def initialize( *source_files )
@@ -73,6 +78,7 @@ module Pangolin
       @encoding             = nil
       @verbose              = false
       @lint                 = [ ]
+      @colorize             = false
     end
   
     # Run javac. If #verbose is true the equivalent command string for
@@ -87,7 +93,7 @@ module Pangolin
       
       output_str = output_writer.to_s
       
-      io.puts output_str if output_str !~ /^\s*$/
+      io.puts format_output(output_str) if output_str !~ /^\s*$/
   
       if 0 == result
         true
@@ -145,6 +151,19 @@ module Pangolin
       else
         items.to_s
       end
+    end
+    
+    def format_output(output)
+      output.split(/\n/).map do |line|
+        case line
+        when /^.+\.java:\d+: .+$/
+          format_error_header(line)
+        when /^\d+ errors?$/
+          format_error(line)
+        else
+          line
+        end
+      end.join("\n")
     end
 
   end

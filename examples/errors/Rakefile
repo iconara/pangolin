@@ -1,0 +1,16 @@
+require File.expand_path(File.dirname(__FILE__) + '/../../lib/pangolin')
+
+require 'rake/clean'
+
+
+CLOBBER.include('build')
+
+
+task :default => :compile
+
+desc "Compile all classes"
+task :compile => 'build' do
+  javac FileList['src/**/*.java'], :destination => 'build', :verbose => true, :colorize => true
+end
+
+directory 'build'
