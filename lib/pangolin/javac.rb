@@ -3,10 +3,9 @@ require 'java'
 
 module Pangolin
   
-  TOOLS_PATHS = [
-    File.join(ENV['JAVA_HOME'], '..', 'lib', 'tools.jar'),
-    File.join(ENV['JAVA_HOME'], 'lib', 'tools.jar')
-  ]
+  TOOLS_PATHS = [ ]
+  TOOLS_PATHS << File.join(ENV['JAVA_HOME'], '..', 'lib', 'tools.jar') if ENV['JAVA_HOME']
+  TOOLS_PATHS << File.join(ENV['JAVA_HOME'], 'lib', 'tools.jar') if ENV['JAVA_HOME']
 
   # must use include_class instead of import because import interferes with Rake's import
   include_class 'java.io.PrintWriter'
