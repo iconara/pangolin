@@ -156,6 +156,8 @@ module Pangolin
     def format_output(output)
       output.split(/\n/).map do |line|
         case line
+        when /^.+\.java:\d+: warning: .+$/
+          format_warning_header(line)
         when /^.+\.java:\d+: .+$/
           format_error_header(line)
         when /^\d+ errors?$/

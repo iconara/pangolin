@@ -51,6 +51,10 @@ module Pangolin
       def format_error_header(text)
         format_text(text, [:red, :bold])
       end
+
+      def format_warning_header(text)
+        format_text(text, [:yellow, :bold])
+      end
       
       def format_error(text)
         format_text(text, :red)
