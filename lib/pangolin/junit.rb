@@ -39,16 +39,16 @@ module Pangolin
       junit  = load_class('org.junit.runner.JUnitCore').new_instance
       result = junit.run(class_instances)
       
-      print_result(result)
+      print_result(io, result)
       
       0 == result.failure_count
     end
       
   private
   
-    def print_result(result)
+    def print_result(io, result)
       if result.was_successful
-        puts format_header('%d tests run in %.1f seconds, no failures' % [result.run_count, result.run_time/1000])
+        io.puts format_header('%d tests run in %.1f seconds, no failures' % [result.run_count, result.run_time/1000])
       else
         args = [
           result.run_count, 
@@ -57,18 +57,18 @@ module Pangolin
           result.failure_count == 1 ? '' : 's'
         ]
     
-        puts format_header('%d tests run in %.1f seconds with %d failure%s' % args)
-        puts ''
+        io.puts format_header('%d tests run in %.1f seconds with %d failure%s' % args)
+        io.puts ''
       
         result.failures.each do |failure|
-          puts format_error_header('- ' + failure.test_header)
-          puts format_error('  ' + failure.message) unless failure.message.nil? || failure.message =~ /^\s*$/
+          io.puts format_error_header('- ' + failure.test_header)
+          io.puts format_error('  ' + failure.message) unless failure.message.nil? || failure.message =~ /^\s*$/
           
           filtered_stack_trace_array(failure.trace).each do |trace_frame|
-            puts format_stack_trace('  ' + trace_frame.strip)
+            io.puts format_stack_trace('  ' + trace_frame.strip)
           end
           
-          puts '' #unless failure == result.failures.to_a.last
+          io.puts '' #unless failure == result.failures.to_a.last
         end
       end
     end
