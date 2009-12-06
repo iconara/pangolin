@@ -1,3 +1,6 @@
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+
+
 describe Junit do
     
   describe 'defaults' do
@@ -19,6 +22,12 @@ describe Junit do
       @junit.classes.should eql(['com.example.HelloWorld', 'com.example.FooBar'])
     end
     
+  end
+  
+  describe '#execute' do
+    it 'raises an exception if there are no tests to run' do
+      lambda { @junit.execute }.should raise_error
+    end
   end
   
 end

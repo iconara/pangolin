@@ -1,9 +1,3 @@
-JUNIT_JAR_PATH = File.expand_path(File.dirname(__FILE__) + '/../ext/junit.jar')
-
-
-require JUNIT_JAR_PATH
-
-
 include_class 'java.lang.ClassLoader'
 include_class 'java.lang.ClassNotFoundException'
 include_class 'java.net.URLClassLoader'
@@ -15,26 +9,12 @@ module Pangolin
   class Junit
     
     include JunitCommon
-    include Output::Formatting
     
-    
-    attr_accessor :class_path
-    attr_accessor :colorize
-    attr_accessor :verbose
-    
-
-    def initialize(*classes)
-      @class_names = classes || [ ]
-      @class_path  = [ ]
-      @colorize    = false
-      @verbose     = false
-    end
-  
-    def classes
-      @class_names
-    end
-  
+    require JUNIT_JAR_PATH
+      
     def execute(io=$stderr)
+      raise 'No tests' if @class_names.nil? || @class_names.empty?
+      
       io.puts 'junit …' if @verbose
       
       junit  = load_class('org.junit.runner.JUnitCore').new_instance
@@ -48,43 +28,15 @@ module Pangolin
   private
   
     def print_result(io, result)
-      if result.was_successful
-        io.puts format_header('%d tests run in %.1f seconds, no failures' % [result.run_count, result.run_time/1000])
-      else
-        args = [
-          result.run_count, 
-          result.run_time/1000, 
-          result.failure_count, 
-          result.failure_count == 1 ? '' : 's'
-        ]
-    
-        io.puts format_header('%d tests run in %.1f seconds with %d failure%s' % args)
-        io.puts ''
+      print_header(io, result.run_count, result.failure_count, result.run_time)
       
+      unless result.was_successful
         result.failures.each do |failure|
-          io.puts format_error_header('- ' + failure.test_header)
-          io.puts format_error('  ' + failure.message) unless failure.message.nil? || failure.message =~ /^\s*$/
-          
-          filtered_stack_trace_array(failure.trace).each do |trace_frame|
-            io.puts format_stack_trace('  ' + trace_frame.strip)
-          end
-          
-          io.puts '' #unless failure == result.failures.to_a.last
+          print_failure(io, failure.test_header, failure.message, failure.trace)
         end
       end
     end
-    
-    def filtered_stack_trace_array(trace)
-      trace.split("\n").reject do |line|
-        case line
-        when /java.lang.AssertionError/, /at org.junit/, /at sun.reflect/, /at java.lang.reflect/, /at org.jruby/, /jrake/
-          true
-        else
-          false
-        end
-      end
-    end  
-  
+
     def full_class_path
       @class_path + [JUNIT_JAR_PATH]
     end
@@ -93,7 +45,7 @@ module Pangolin
       full_class_path.join(':')
     end
 
-    def class_path_urls      
+    def class_path_urls
       full_class_path.map do |e|
         full_path  = File.expand_path(e)
         full_path += '/' if File.directory?(full_path) && full_path[-1] != '/'
