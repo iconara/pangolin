@@ -1,15 +1,3 @@
-raise "Pangolin requires JRuby" unless RUBY_PLATFORM =~ /\bjava\b/
-
-$stderr.puts "Warning: JAVA_HOME not set, this may cause problems" unless ENV['JAVA_HOME']
-
-
-require File.expand_path(File.dirname(__FILE__)) + '/pangolin/output/formatting'
-require File.expand_path(File.dirname(__FILE__)) + '/pangolin/javac'
-require File.expand_path(File.dirname(__FILE__)) + '/pangolin/jar'
-require File.expand_path(File.dirname(__FILE__)) + '/pangolin/junit'
-
-
-
 module Pangolin # :nodoc:
   
   def self.version # :nodoc:
@@ -42,17 +30,42 @@ module Pangolin # :nodoc:
     end
   end
   
+  def self.is_java?
+    defined?(JRUBY_VERSION)
+  end
+  
 end
 
-class Exception # :nodoc:
-  alias exception_backtrace backtrace
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/common/jar_common'
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/common/javac_common'
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/common/junit_common'
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/output/formatting'
+
+if Pangolin::is_java?
+  $stderr.puts 'Warning: JAVA_HOME not set, this may cause problems' unless ENV['JAVA_HOME']
   
-  # Elide JRuby backtraces to remove all the internal stuff
-  def backtrace
-    exception_backtrace.reject do |line|
-      line =~ /^(org\/jruby|com\/mysql|sun\/|java\/)/
+  require File.expand_path(File.dirname(__FILE__)) + '/pangolin/java/javac'
+  require File.expand_path(File.dirname(__FILE__)) + '/pangolin/java/jar'
+  require File.expand_path(File.dirname(__FILE__)) + '/pangolin/java/junit'
+  
+  class Exception # :nodoc:
+    alias exception_backtrace backtrace
+  
+    # Elide JRuby backtraces to remove all the internal stuff
+    def backtrace
+      exception_backtrace.reject do |line|
+        line =~ /^(org\/jruby|com\/mysql|sun\/|java\/)/
+      end
     end
   end
+else
+  require 'rubygems'
+  
+  gem 'rubyzip', '>= 0.9.1'
+  
+  require File.expand_path(File.dirname(__FILE__)) + '/pangolin/exec/javac'
+  require File.expand_path(File.dirname(__FILE__)) + '/pangolin/exec/jar'
+  require File.expand_path(File.dirname(__FILE__)) + '/pangolin/exec/junit'
 end
 
 # Javac can be run in either command or yield mode: command mode
