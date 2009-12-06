@@ -19,9 +19,11 @@ module Pangolin
     def execute_compiler(io)
       output_writer = StringWriter.new
       
-      compiler.compile(command_args.to_java(java.lang.String), PrintWriter.new(output_writer))
+      status = compiler.compile(command_args.to_java(java.lang.String), PrintWriter.new(output_writer))
       
       io.print(format_output(output_writer.to_s))
+      
+      0 == status
     end
     
   private

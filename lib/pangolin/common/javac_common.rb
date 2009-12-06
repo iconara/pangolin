@@ -89,13 +89,7 @@ module Pangolin
   
       io.puts 'javac …' if @verbose
   
-      result = execute_compiler(io)
-  
-      if 0 == result
-        true
-      else
-        false
-      end
+      execute_compiler(io)
     end
 
     def lint_flags

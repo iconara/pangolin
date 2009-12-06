@@ -3,7 +3,11 @@ module Pangolin
     include JavacCommon
     
     def execute_compiler(io)
-      io.puts(format_output(%x(javac #{command_args.join(' ')} 2>&1)))
+      output = %x(javac #{command_args.join(' ')} 2>&1)
+      
+      io.puts(format_output(output))
+      
+      $?.success?
     end
   end
 end
