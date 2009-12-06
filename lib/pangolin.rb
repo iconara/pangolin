@@ -36,10 +36,10 @@ module Pangolin # :nodoc:
   
 end
 
+require File.expand_path(File.dirname(__FILE__)) + '/pangolin/output/formatting'
 require File.expand_path(File.dirname(__FILE__)) + '/pangolin/common/jar_common'
 require File.expand_path(File.dirname(__FILE__)) + '/pangolin/common/javac_common'
 require File.expand_path(File.dirname(__FILE__)) + '/pangolin/common/junit_common'
-require File.expand_path(File.dirname(__FILE__)) + '/pangolin/output/formatting'
 
 if Pangolin::is_java?
   $stderr.puts 'Warning: JAVA_HOME not set, this may cause problems' unless ENV['JAVA_HOME']
