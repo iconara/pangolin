@@ -9,7 +9,7 @@ describe Jar do
   
   context 'a created jar file' do
     before do
-      @output_dir = File.join(Dir.tmpdir, "jar_spec_#{rand(1000)}")      
+      @output_dir = File.join(Dir.tmpdir, "jar_spec_#{rand(1_000_000)}")
       @output_file = File.join(@output_dir, 'package.jar')
       @base_dir = File.dirname(__FILE__) + '/data/classes'
       @files = Dir["#{@base_dir}/**/*.class"]
