@@ -12,7 +12,7 @@ task :default => :package
 task :package => [:compile, 'dist'] do
   jar 'dist/package.jar', FileList['build/**/*.class'], :base_dir => 'build', 
                                                       :main_class => 'com.example.HelloWorld', 
-                                                        :manifest => {'X-Test', 'foo'},
+                                                        :manifest => {'X-Test' => 'foo'},
                                                          :verbose => true
 end
 
