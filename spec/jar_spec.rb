@@ -126,11 +126,11 @@ describe Jar do
       }.should_not raise_error
     end
     
-    it "should ignore case when setting attributes" do
-      @jar.manifest = {'Hello' => 'World', 'hello' => 'Theo'}
+    it "should ignore case when removing attributes" do
+      @jar.manifest = {'Hello' => 'World'}
+      @jar.remove_manifest_attribute('hello')
       
-      @jar.manifest_string.include?('Hello: World').should be_false
-      @jar.manifest_string.include?('hello: Theo').should be_true
+      @jar.manifest_string.include?('Hello:').should be_false
     end
         
   end
