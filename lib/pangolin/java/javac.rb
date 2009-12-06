@@ -86,6 +86,8 @@ module Pangolin
     # the +javac+ command will be printed to the stream passed as +io+ (or
     # +$stdout+ by default)
     def execute( io = $stderr )
+      raise 'No source files' if @source_files.nil? || @source_files.empty?
+      
       output_writer = StringWriter.new
   
       io.puts 'javac …' if @verbose
