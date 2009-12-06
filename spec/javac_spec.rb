@@ -1,3 +1,6 @@
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+
+
 describe Javac do
   
   before(:each) do
@@ -198,6 +201,22 @@ describe Javac do
       @javac.command_args.should_not include('-Xmaxwarns')
     end
 
+  end
+ 
+  describe '#execute' do
+    before do
+      @javac.stub!(:execute_compiler).and_return(1)
+    end
+    
+    it 'raises an exception if there are no source files' do
+      @javac.source_files = [ ]
+
+      lambda { @javac.execute }.should raise_error
+      
+      @javac.source_files = nil
+      
+      lambda { @javac.execute }.should raise_error
+    end
   end
   
 end
