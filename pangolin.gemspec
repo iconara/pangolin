@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{pangolin}
-  s.version = "0.3.3"
+  s.version = "0.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Theo Hultberg"]
-  s.date = %q{2009-12-06}
+  s.date = %q{2009-12-07}
   s.description = %q{Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only thing missing from Rake is a way to run javac and jar, and although it's easy to run these as shell scripts you have to wait for the JVM to start. In combination with JRuby this gem lets you run javac and jar in your Rake scripts without exec'ing.}
   s.email = %q{theo@iconara.net}
   s.extensions = ["Rakefile"]
@@ -44,7 +44,13 @@ Gem::Specification.new do |s|
      "lib/pangolin/output/formatting.rb",
      "pangolin.gemspec",
      "spec/integration/data/classes/com/example/HelloWorld.class",
-     "spec/integration/jar_spec.rb",
+     "spec/integration/data/sources/com/example/Error.java",
+     "spec/integration/data/sources/com/example/HelloWorld.java",
+     "spec/integration/data/tests/com/example/HelloWorld.class",
+     "spec/integration/data/tests/com/example/TestHelloWorld.class",
+     "spec/integration/jar_intg_spec.rb",
+     "spec/integration/javac_intg_spec.rb",
+     "spec/integration/junit_intg_spec.rb",
      "spec/jar_cmd_spec.rb",
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
@@ -63,7 +69,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Ruby wrappers for javac and jar that don't just exec}
   s.test_files = [
-    "spec/integration/jar_spec.rb",
+    "spec/integration/jar_intg_spec.rb",
+     "spec/integration/javac_intg_spec.rb",
+     "spec/integration/junit_intg_spec.rb",
      "spec/jar_cmd_spec.rb",
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
