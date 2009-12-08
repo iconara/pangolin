@@ -63,7 +63,11 @@ if Pangolin::is_java?
 else
   require 'rubygems'
   
-  gem 'rubyzip', '>= 0.9.1'
+  if RUBY_VERSION =~ /^1\.9/
+    gem 'rubyzip2', '>= 2.0.0'
+  else
+    gem 'rubyzip', '>= 0.9.1'
+  end
   
   require File.expand_path(File.dirname(__FILE__)) + '/pangolin/exec/javac'
   require File.expand_path(File.dirname(__FILE__)) + '/pangolin/exec/jar'
