@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+
+
 describe "jar command" do
   
   it "should pass the first argument to the constructor of Jar" do
