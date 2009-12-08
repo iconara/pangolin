@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Pangolin
   class Javac
     include JavacCommon

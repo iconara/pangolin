@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 describe 'junit command' do
   
   before do

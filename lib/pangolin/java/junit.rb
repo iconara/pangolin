@@ -1,3 +1,8 @@
+# encoding: utf-8
+
+require 'java'
+
+
 include_class 'java.lang.ClassLoader'
 include_class 'java.lang.ClassNotFoundException'
 include_class 'java.net.URLClassLoader'

@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Pangolin # :nodoc:
   
   def self.version # :nodoc:

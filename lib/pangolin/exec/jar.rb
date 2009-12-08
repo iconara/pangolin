@@ -1,4 +1,7 @@
+# encoding: utf-8
+
 require 'zip/zip'
+
 
 module Pangolin
   class Jar

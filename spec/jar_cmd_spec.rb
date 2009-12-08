@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 describe "jar command" do
   
   it "should pass the first argument to the constructor of Jar" do
