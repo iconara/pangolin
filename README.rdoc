@@ -10,7 +10,7 @@ Ant is a nice tool for writing Java build scripts, but Rake is nicer. The only t
 
 
   task :compile do
-    javac FileList['src/**/*.java'], :destination => 'build, :class_path => FileList['lib/*.jar']
+    javac FileList['src/**/*.java'], :destination => 'build', :class_path => FileList['lib/*.jar']
   end
 
   task :dist => :compile do
