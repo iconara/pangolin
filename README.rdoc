@@ -60,4 +60,4 @@ Even though the whole rationale behind Pangolin is to avoid exec it wouldn't be 
 
 == Pangolin?
 
-Pangolins eats ants for breakfast.
+Pangolins eat ants for breakfast.
