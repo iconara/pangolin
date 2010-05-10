@@ -69,16 +69,16 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Ruby wrappers for javac and jar that don't just exec}
   s.test_files = [
-    "spec/jar_cmd_spec.rb",
+    "spec/integration/jar_intg_spec.rb",
+     "spec/integration/javac_intg_spec.rb",
+     "spec/integration/junit_intg_spec.rb",
+     "spec/jar_cmd_spec.rb",
      "spec/jar_spec.rb",
      "spec/javac_cmd_spec.rb",
      "spec/javac_spec.rb",
      "spec/junit_cmd_spec.rb",
      "spec/junit_spec.rb",
-     "spec/spec_helper.rb",
-     "spec/integration/jar_intg_spec.rb",
-     "spec/integration/javac_intg_spec.rb",
-     "spec/integration/junit_intg_spec.rb"
+     "spec/spec_helper.rb"
   ]
 
   if s.respond_to? :specification_version then
