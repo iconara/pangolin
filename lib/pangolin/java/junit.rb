@@ -3,10 +3,10 @@
 require 'java'
 
 
-include_class 'java.lang.ClassLoader'
-include_class 'java.lang.ClassNotFoundException'
-include_class 'java.net.URLClassLoader'
-include_class 'java.net.URL'
+ClassLoader = java.lang.ClassLoader
+ClassNotFoundException = java.lang.ClassNotFoundException
+URLClassLoader = java.net.URLClassLoader
+JURL = java.net.URL
 
 
 module Pangolin
@@ -55,12 +55,12 @@ module Pangolin
         full_path  = File.expand_path(e)
         full_path += '/' if File.directory?(full_path) && full_path[-1] != '/'
         
-        URL.new('file', 'localhost', full_path)
+        JURL.new('file', 'localhost', full_path)
       end
     end
 
     def class_loader
-      @class_loader ||= URLClassLoader.new(class_path_urls.to_java(URL), ClassLoader.system_class_loader)
+      @class_loader ||= URLClassLoader.new(class_path_urls.to_java(JURL), ClassLoader.system_class_loader)
     end
 
     def class_instances

@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require 'stringio'
+
+
 module Pangolin
   module JarCommon
 
