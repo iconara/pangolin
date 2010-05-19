@@ -60,11 +60,11 @@ module Pangolin
     end
 
     def class_loader
-      @class_loader ||= URLClassLoader.new(class_path_urls.to_java(JURL), ClassLoader.system_class_loader)
+      @class_loader ||= URLClassLoader.new(class_path_urls.to_a.to_java(JURL), ClassLoader.system_class_loader)
     end
 
     def class_instances
-      @class_names.map { |class_name| load_class(class_name) }.to_java(java.lang.Class)
+      @class_names.map { |class_name| load_class(class_name) }.to_a.to_java(java.lang.Class)
     end
     
     def load_class(class_name)
