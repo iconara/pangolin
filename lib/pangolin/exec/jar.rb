@@ -10,9 +10,11 @@ module Pangolin
     
     def create_zipfile # :nodoc:
       ZipFile.open(@output, ZipFile::CREATE) do |zipfile|
-        @entries.each do |path, io|
+        @entries.each do |path, entry|
           zipfile.get_output_stream(path) do |f|
-            f.write(io.read)
+            entry.open do |io|
+              f.write(io.read)
+            end
           end
         end
       end

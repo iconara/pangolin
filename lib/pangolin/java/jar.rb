@@ -17,13 +17,13 @@ module Pangolin
       
       zipstream = ZipOutputStream.new(FileOutputStream.new(@output))
       
-      @entries.each do |path, io|
+      @entries.each do |path, entry|
+        io = entry.open
         while buffer = io.read(buffer_size)
           zipstream.put_next_entry(ZipEntry.new(path))
           zipstream.write(buffer.to_java_bytes, 0, buffer.length)
           zipstream.close_entry
         end
-        
         io.close
       end
             

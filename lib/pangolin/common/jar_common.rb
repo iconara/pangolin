@@ -24,7 +24,7 @@ module Pangolin
     def initialize( output, files = nil, base_dir = nil )
       @output      = output
       @base_dir    = base_dir
-      @entries     = { } # archive_path => IO
+      @entries     = { } # archive_path => {String,File}Entry
       @verbose     = false
       @compression = 1
       
@@ -99,7 +99,7 @@ module Pangolin
         raise ArgumentError, "\"#{file_path}\" does not exist"
       end
       
-      @entries[archive_path || file_path] = File.new(file_path)
+      @entries[archive_path || file_path] = FileEntry.new(file_path)
     end
     
     # Adds a list of files to the archive, at paths relative to +base_dir+
@@ -112,7 +112,7 @@ module Pangolin
     
     # Adds a string to the archive at +archive_path+.
     def add_blob( str, archive_path )
-      @entries[archive_path] = StringIO.new(str)
+      @entries[archive_path] = StringEntry.new(str)
     end
     
     def remove_entry( archive_path ) # :nodoc:
@@ -151,5 +151,36 @@ module Pangolin
       path
     end
     
+    class StringEntry
+      def initialize(str)
+        @str = str
+      end
+      def open
+        io = StringIO.new(@str)
+        if block_given?
+          yield io
+        else
+          io
+        end
+      end
+      def close
+      end
+    end
+    
+    class FileEntry
+      def initialize(path)
+        @path = path
+      end
+      def open(&block)
+        if block_given?
+          File.open(@path, 'r', &block)
+        else
+          @io = File.new(@path)
+        end
+      end
+      def close
+        @io.close
+      end
+    end
   end
 end
